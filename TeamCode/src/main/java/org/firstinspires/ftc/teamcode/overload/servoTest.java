@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
+
 import org.firstinspires.ftc.teamcode.subsystems.armSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.clawSubsystem;
 
