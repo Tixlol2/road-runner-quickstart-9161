@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.Intake.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+
+import org.firstinspires.ftc.teamcode.Intake.clawSubsystem;
 
 public class wristDownCommand extends CommandBase {
 
