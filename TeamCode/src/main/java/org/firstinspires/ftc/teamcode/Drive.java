@@ -1,24 +1,19 @@
-package org.firstinspires.ftc.teamcode.overload;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-import org.firstinspires.ftc.teamcode.subsystems.armPIDFCommand;
-import org.firstinspires.ftc.teamcode.subsystems.armSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.clawSubsystem;
+import org.firstinspires.ftc.teamcode.Stage1.Commands.armPIDFCommand;
+import org.firstinspires.ftc.teamcode.Stage1.armSubsystem;
+import org.firstinspires.ftc.teamcode.Intake.clawSubsystem;
 
 
 @TeleOp(name="Pedro Drive", group = "Drive")
-public class pedroDrive extends LinearOpMode {
+public class Drive extends LinearOpMode {
 
     //Class def
 
