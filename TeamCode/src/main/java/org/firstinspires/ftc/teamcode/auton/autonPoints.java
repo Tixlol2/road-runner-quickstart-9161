@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auton;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
+
+import com.acmerobotics.roadrunner.Pose2d;
 
 public class autonPoints {
 
@@ -27,39 +28,39 @@ public class autonPoints {
      */
 
 
-    public Pose startRedScore = new Pose(-60, -60, Math.toRadians(-90));
-    public Pose startBlueScore = new Pose(60, 60, Math.toRadians(90));
+    public Pose2d startRedScore = new Pose2d(-60, -60, Math.toRadians(-90));
+    public Pose2d startBlueScore = new Pose2d(60, 60, Math.toRadians(90));
 
-    public Pose startRedPark = new Pose(-60, 12, Math.toRadians(-90));
-    public Pose startBluePark = new Pose(60, -12, Math.toRadians(90));
+    public Pose2d startRedPark = new Pose2d(-60, 12, Math.toRadians(-90));
+    public Pose2d startBluePark = new Pose2d(60, -12, Math.toRadians(90));
 
-    public Pose leftRedSpecimen = new Pose(-50, 50);
-    public Pose middleRedSpecimen = new Pose(-50, 60);
-    public Pose rightRedSpecimen = new Pose(-50, 70);
+    public Pose2d leftRedSpecimen = new Pose2d(-50, 50, 0);
+    public Pose2d middleRedSpecimen = new Pose2d(-50, 60, 0);
+    public Pose2d rightRedSpecimen = new Pose2d(-50, 70, 0);
 
-    public Pose leftBlueSpecimen = new Pose(50, -50);
-    public Pose middleBlueSpecimen = new Pose(50, -60);
-    public Pose rightBlueSpecimen = new Pose(50, -70);
+    public Pose2d leftBlueSpecimen = new Pose2d(50, -50, 0);
+    public Pose2d middleBlueSpecimen = new Pose2d(50, -60, 0);
+    public Pose2d rightBlueSpecimen = new Pose2d(50, -70, 0);
 
-    public Pose leftYellowSpecimenR = new Pose(-26, -70);
-    public Pose middleYellowSpecimenR = new Pose(-26, -58);
-    public Pose rightYellowSpecimenR = new Pose(-26, -46);
+    public Pose2d leftYellowSpecimenR = new Pose2d(-26, -70, 0);
+    public Pose2d middleYellowSpecimenR = new Pose2d(-26, -58, 0);
+    public Pose2d rightYellowSpecimenR = new Pose2d(-26, -46, 0);
 
-    public Pose leftYellowSpecimenB = new Pose(26, 70);
-    public Pose middleYellowSpecimenB = new Pose(26, 58);
-    public Pose rightYellowSpecimenB = new Pose(26, 46);
+    public Pose2d leftYellowSpecimenB = new Pose2d(26, 70, 0);
+    public Pose2d middleYellowSpecimenB = new Pose2d(26, 58, 0);
+    public Pose2d rightYellowSpecimenB = new Pose2d(26, 46, 0);
 
-    public Pose redSubmersibleMidpoint = new Pose(0, -16);
-    public Pose blueSubmersibleMidpoint = new Pose(0, 16);
+    public Pose2d redSubmersibleMidpoint = new Pose2d(0, -16, 0);
+    public Pose2d blueSubmersibleMidpoint = new Pose2d(0, 16, 0);
 
-    public Pose redRungMidpoint = new Pose(-24, 0);
-    public Pose blueRungMidpoint = new Pose(24, 0);
+    public Pose2d redRungMidpoint = new Pose2d(-24, 0, 0);
+    public Pose2d blueRungMidpoint = new Pose2d(24, 0, 0);
 
-    public Pose redScore = new Pose(-48, -48, Math.toRadians(45));
-    public Pose blueScore = new Pose(48, 48, Math.toRadians(-45));
+    public Pose2d redScore = new Pose2d(-48, -48, Math.toRadians(45));
+    public Pose2d blueScore = new Pose2d(48, 48, Math.toRadians(-45));
 
-    public Pose redPark = new Pose(-60,48);
-    public Pose bluePark = new Pose(60, -48);
+    public Pose2d redPark = new Pose2d(-60,48, Math.toRadians(-90));
+    public Pose2d bluePark = new Pose2d(60, -48, Math.toRadians(90));
 
 
 
