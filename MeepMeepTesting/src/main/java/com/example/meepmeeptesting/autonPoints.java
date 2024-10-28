@@ -59,7 +59,7 @@ public class autonPoints {
     public Pose2d redScore = new Pose2d(-48, -48, Math.toRadians(-315));
     public Pose2d blueScore = new Pose2d(48, 48, Math.toRadians(225));
 
-    public Pose2d redPark = new Pose2d(48,-60, Math.toRadians(-90));
+    public Pose2d redPark = new Pose2d(48,-60, Math.toRadians(90));
     public Pose2d bluePark = new Pose2d(-48, 60, Math.toRadians(90));
 
 
