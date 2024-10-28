@@ -1,18 +1,10 @@
-package org.firstinspires.ftc.teamcode.overload;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
-
-
-import org.firstinspires.ftc.teamcode.subsystems.armSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.clawSubsystem;
 
 
 @TeleOp(name="servoTest", group = "Drive")

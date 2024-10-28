@@ -1,6 +1,13 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
+import org.firstinspires.ftc.teamcode.Intake.Commands.clawCloseCommand;
+import org.firstinspires.ftc.teamcode.Intake.Commands.wristDownCommand;
+import org.firstinspires.ftc.teamcode.Intake.Commands.wristUpCommand;
+import org.firstinspires.ftc.teamcode.Intake.clawSubsystem;
+import org.firstinspires.ftc.teamcode.Stage1.Commands.armPIDFCommand;
+import org.firstinspires.ftc.teamcode.Stage1.armSubsystem;
 
 public class grabSpecimen extends SequentialCommandGroup {
 

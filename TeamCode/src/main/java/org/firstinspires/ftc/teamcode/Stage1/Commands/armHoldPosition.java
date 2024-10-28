@@ -1,8 +1,10 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.Stage1.Commands;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+
+import org.firstinspires.ftc.teamcode.Stage1.armSubsystem;
 
 @Config
 public class armHoldPosition extends CommandBase {
@@ -48,41 +50,41 @@ public class armHoldPosition extends CommandBase {
 
         @Override
         public void initialize() {
-            angleTarget = m_armSubsystem.getAngleTargetTK();
-            extendTarget = m_armSubsystem.getExtTargetTK();
+            angleTarget = m_armSubsystem.getAngleTarget();
+            extendTarget = m_armSubsystem.getExtTarget();
         }
 
         @Override
         public void execute() {
-            angleTarget = m_armSubsystem.getAngleTargetTK();
+            angleTarget = m_armSubsystem.getAngleTarget();
             if(angleTarget >= -15){
                 angleTarget = -15;
             } else if (angleTarget <= -550){angleTarget = -550;}
             //Angle motor
             pidFController.setPID(pAngle, iAngle, dAngle);
-            armAngle = m_armSubsystem.angleMotor.getCurrentPosition();
+            armAngle = m_armSubsystem.getAnglePos();
             anglePIDFpower = pidFController.calculate(armAngle, angleTarget);
             anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
             anglePower = anglePIDFpower + anglefeedForward;
             if(anglePower > .8 ){
                 anglePower = .8;
             } else if (anglePower < -.8){anglePower = -.8;}
-            m_armSubsystem.angleMotor.setPower(anglePower);
 
-            extendTarget = m_armSubsystem.getExtTargetTK();
+
+            extendTarget = m_armSubsystem.getExtTarget();
             //Extension motor
             if(extendTarget >= -50){
                 extendTarget = -50;
             } else if (extendTarget <= -3400){angleTarget = -3400;}
             pidController.setPID(pExtend, iExtend, dExtend);
-            extendPos = m_armSubsystem.extenderMotor.getCurrentPosition();
+
             PIDFpowerExtend = pidController.calculate(extendPos, extendTarget);
 
             powerExtension = PIDFpowerExtend;
             if(powerExtension > .8 ){
                 powerExtension = .8;
             } else if (powerExtension < -.8){powerExtension = -.8;}
-            m_armSubsystem.extenderMotor.setPower(powerExtension);
+
 
 
         }

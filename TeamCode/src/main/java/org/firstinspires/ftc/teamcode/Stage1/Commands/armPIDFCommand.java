@@ -1,8 +1,10 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.Stage1.Commands;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+
+import org.firstinspires.ftc.teamcode.Stage1.armSubsystem;
 
 @Config
 public class armPIDFCommand extends CommandBase {

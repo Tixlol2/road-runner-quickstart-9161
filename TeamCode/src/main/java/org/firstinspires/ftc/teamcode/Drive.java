@@ -1,30 +1,29 @@
-package org.firstinspires.ftc.teamcode.overload;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-import org.firstinspires.ftc.teamcode.subsystems.armPIDFCommand;
-import org.firstinspires.ftc.teamcode.subsystems.armSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.clawSubsystem;
+import org.firstinspires.ftc.teamcode.Stage1.Commands.armPIDFCommand;
+import org.firstinspires.ftc.teamcode.Stage1.armSubsystem;
+import org.firstinspires.ftc.teamcode.Intake.clawSubsystem;
+import org.firstinspires.ftc.teamcode.rrFiles.MecanumDrive;
 
 
-@TeleOp(name="Pedro Drive", group = "Drive")
-public class pedroDrive extends LinearOpMode {
+@TeleOp(name="Drive", group = "Drive")
+public class Drive extends LinearOpMode {
 
     //Class def
 
 
-    double deflator;
-    double deflator2;
+    double gp2Deflator;
+    double gp1Deflator;
 
     int angleTarget = 0;
     int extendTarget = 0;
@@ -36,6 +35,7 @@ public class pedroDrive extends LinearOpMode {
     //Follower follower;
     boolean driveCentric;
     //CommandScheduler commandScheduler;
+    MecanumDrive mecDrive;
 
     private PIDController angleController;
     private PIDController extendController;
@@ -48,27 +48,19 @@ public class pedroDrive extends LinearOpMode {
     private final double ticks_in_degree = (751.8 * 4) / 360;
     private final double ticks_in_inch = (537.7 / 112) / 25.4;
 
-    private int armAngle;
-    private int extendPos;
-    private double anglePower;
-    private double extendPower;
-    private double anglePIDFpower;
-    private double anglefeedForward;
-
-    private double armX;
-    private double armY;
-
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
 
-
+        //During Initialization:
         angleController = new PIDController(pAngle, iAngle, dAngle);
         extendController = new PIDController(pExtend, iExtend, dExtend);
-        waitForStart();
-        //During Initialization:
+
+        mecDrive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
+
+
         //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
 
 
@@ -84,7 +76,7 @@ public class pedroDrive extends LinearOpMode {
 
 
 
-
+        waitForStart();
 
 
 
@@ -101,8 +93,8 @@ public class pedroDrive extends LinearOpMode {
             //Input
             // ----------------------------
 
-            deflator = gamepad2.left_bumper && gamepad2.right_bumper ? 0.5 : gamepad2.left_bumper ? 0.7 : 1;
-            deflator2 = gamepad2.left_bumper && gamepad2.right_bumper ? 0.5 : gamepad2.left_bumper ? 0.7 : 1;
+            gp2Deflator = gamepad2.left_bumper && gamepad2.right_bumper ? 0.5 : gamepad2.left_bumper ? 0.7 : 1;
+            gp1Deflator = gamepad1.left_bumper && gamepad1.right_bumper ? 0.5 : gamepad1.left_bumper ? 0.7 : 1;
 
             if (gamepad1.b) {
                 driveCentric = false;
@@ -123,9 +115,9 @@ public class pedroDrive extends LinearOpMode {
             }
 
             //Testing armSubsystem
-            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.1 * deflator);
-            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 4 *deflator);
-            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 40 *deflator);
+            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.1 * gp2Deflator);
+            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 4 * gp2Deflator);
+            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 40 * gp2Deflator);
 
 
 
@@ -133,7 +125,7 @@ public class pedroDrive extends LinearOpMode {
             // Telemetry
             // ----------------------------
 
-            telemetry.addData("Current Angle in Ticks: ", armAngle);
+            telemetry.addData("Current Angle in Ticks: ", 0);
             telemetry.addData("Current Angle Target in Ticks: ", angleTarget);
 
 
@@ -156,14 +148,21 @@ public class pedroDrive extends LinearOpMode {
 
 
 
-            armSubsystem.motorCalculations(angleTarget,extendTarget, angleController, extendController);
+            armSubsystem.motorCalculations(angleTarget,extendTarget);
             // ----------------------------
             // Updaters
             // ----------------------------
 
             clawSubsystem.setAnglePosition(clawTarget);
-//            follower.setTeleOpMovementVectors(-gamepad1.left_stick_y*deflator2, -gamepad1.left_stick_x*deflator2, -gamepad1.right_stick_x*deflator2, driveCentric);
-//            follower.update();
+
+            mecDrive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            gp1Deflator * (gamepad1.left_stick_x* Math.cos(mecDrive.pose.heading.toDouble()) - gamepad1.left_stick_y * Math.sin(mecDrive.pose.heading.toDouble())),
+                            gp1Deflator * (gamepad1.left_stick_x* Math.sin(mecDrive.pose.heading.toDouble()) + gamepad1.left_stick_y * Math.cos(mecDrive.pose.heading.toDouble()))) ,
+                    -gamepad1.right_stick_x* gp1Deflator
+            ));
+
+
 
             telemetry.update();
         }
