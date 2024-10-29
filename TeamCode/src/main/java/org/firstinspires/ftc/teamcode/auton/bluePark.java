@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.auton;
 
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Intake.Commands.clawCloseCommand;
 import org.firstinspires.ftc.teamcode.rrFiles.MecanumDrive;
 
 public class bluePark extends LinearOpMode {
@@ -16,6 +18,7 @@ public class bluePark extends LinearOpMode {
         MecanumDrive mecDrive;
         autonPoints autoPoints = new autonPoints();
         Action traj1;
+        clawCloseCommand clawCloseCommand;
 
         mecDrive = new MecanumDrive(hardwareMap, autoPoints.startBluePark);
 
@@ -30,7 +33,9 @@ public class bluePark extends LinearOpMode {
 
         while(!isStopRequested() && opModeIsActive()){
             //Main loop
-            Actions.runBlocking(traj1);
+            Actions.runBlocking(new SequentialAction(
+                    traj1
+            ));
 
 
 

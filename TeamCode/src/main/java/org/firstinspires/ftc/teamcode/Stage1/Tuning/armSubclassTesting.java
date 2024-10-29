@@ -70,7 +70,7 @@ public class armSubclassTesting extends LinearOpMode {
             telemetry.addData("Current Set X: ",x );
             telemetry.addData("Current Set Y: ",y );
 
-            position = armSubsystem.getPosition();
+//            position = armSubsystem.getPosition();
 
             telemetry.addData("Current X: ", position[0]);
             telemetry.addData("Current y: ", position[1]);
