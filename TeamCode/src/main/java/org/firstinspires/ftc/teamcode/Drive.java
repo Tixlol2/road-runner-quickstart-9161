@@ -25,8 +25,8 @@ public class Drive extends LinearOpMode {
     double gp2Deflator;
     double gp1Deflator;
 
-    int angleTarget = 0;
-    int extendTarget = 0;
+    int angleTarget = 10;
+    int extendTarget = 10;
     double clawTarget = 0;
 
 
@@ -116,8 +116,8 @@ public class Drive extends LinearOpMode {
 
             //Testing armSubsystem
             clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.1 * gp2Deflator);
-            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 4 * gp2Deflator);
-            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 40 * gp2Deflator);
+            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * -4 * gp2Deflator);
+            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * -40 * gp2Deflator);
 
 
 
@@ -125,7 +125,7 @@ public class Drive extends LinearOpMode {
             // Telemetry
             // ----------------------------
 
-            telemetry.addData("Current Angle in Ticks: ", 0);
+            telemetry.addData("Current Angle in Ticks: ", armSubsystem.getAnglePos());
             telemetry.addData("Current Angle Target in Ticks: ", angleTarget);
 
 
