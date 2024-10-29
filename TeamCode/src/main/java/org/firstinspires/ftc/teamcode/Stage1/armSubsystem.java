@@ -104,7 +104,7 @@ public class armSubsystem extends SubsystemBase {
         // CLamping
 
         angleTarget = Math.min(angleMin, Math.max(angleMax, angleTarget));
-        extendTarget = (int) Math.min(extMin, Math.max(extMax - ((extMax - 20*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree))), extendTarget));
+        extendTarget = (int) Math.min(extMin, Math.max(Math.min(extMax, extMax - ((extMax - 20*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree)))), extendTarget));
 
         //Angle motor
 
