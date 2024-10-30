@@ -6,11 +6,14 @@ import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Intake.Commands.clawCloseCommand;
 import org.firstinspires.ftc.teamcode.rrFiles.MecanumDrive;
 
+
+@Autonomous
 public class bluePark extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

@@ -5,10 +5,11 @@ import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.rrFiles.MecanumDrive;
-
+@Autonomous
 public class blueScore extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -17,7 +18,7 @@ public class blueScore extends LinearOpMode {
         autonPoints autoPoints = new autonPoints();
         Action traj1;
 
-        mecDrive = new MecanumDrive(hardwareMap, autoPoints.startBluePark);
+        mecDrive = new MecanumDrive(hardwareMap, autoPoints.startBlueScore);
         traj1 = mecDrive.actionBuilder(autoPoints.startBlueScore)
                 .splineToConstantHeading(autoPoints.leftBlueSpecimen.component1(), autoPoints.leftBlueSpecimen.component2())
                 .waitSeconds(.5)
