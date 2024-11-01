@@ -154,11 +154,12 @@ public class Drive extends LinearOpMode {
             // ----------------------------
 
             clawSubsystem.setAnglePosition(clawTarget);
+            mecDrive.updatePoseEstimate();
 
             mecDrive.setDrivePowers(new PoseVelocity2d(
                     new Vector2d(
-                            gp1Deflator * (gamepad1.left_stick_x* Math.cos(mecDrive.pose.heading.toDouble()) - gamepad1.left_stick_y * Math.sin(mecDrive.pose.heading.toDouble())),
-                            gp1Deflator * (gamepad1.left_stick_x* Math.sin(mecDrive.pose.heading.toDouble()) + gamepad1.left_stick_y * Math.cos(mecDrive.pose.heading.toDouble()))) ,
+                            gp1Deflator *  (driveCentric ? (gamepad1.left_stick_y* Math.cos(mecDrive.pose.heading.toDouble()) - gamepad1.left_stick_x * Math.sin(mecDrive.pose.heading.toDouble())) : -gamepad1.left_stick_y),
+                            gp1Deflator * (driveCentric ? (gamepad1.left_stick_y* Math.sin(mecDrive.pose.heading.toDouble()) + gamepad1.left_stick_x * Math.cos(mecDrive.pose.heading.toDouble())) : -gamepad1.left_stick_x)) ,
                     -gamepad1.right_stick_x* gp1Deflator
             ));
 
