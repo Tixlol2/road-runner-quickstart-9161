@@ -39,28 +39,31 @@ public class autonPoints {
     public Pose2d rightRedSpecimen = new Pose2d(-68, -42, Math.toRadians(135));
 
     public Pose2d leftBlueSpecimen = new Pose2d(48, 42, Math.toRadians(-90));
-    public Pose2d middleBlueSpecimen = new Pose2d(58, 42,  Math.toRadians(-90));
-    public Pose2d rightBlueSpecimen = new Pose2d(68, 42,  Math.toRadians(-45));
+    public Pose2d middleBlueSpecimen = new Pose2d(58, 42,  Math.toRadians(-112.5));
+    public Pose2d rightBlueSpecimen = new Pose2d(68, 42,  Math.toRadians(-135));
 
-    public Pose2d leftYellowSpecimenR = new Pose2d(-26, -70, 0);
-    public Pose2d middleYellowSpecimenR = new Pose2d(-26, -58, 0);
-    public Pose2d rightYellowSpecimenR = new Pose2d(-26, -46, 0);
+    public Pose2d leftYellowSpecimenR = new Pose2d(-26, -70, Math.toRadians(90));
+    public Pose2d middleYellowSpecimenR = new Pose2d(-26, -58, Math.toRadians(112.5));
+    public Pose2d rightYellowSpecimenR = new Pose2d(-26, -46, Math.toRadians(135));
 
-    public Pose2d leftYellowSpecimenB = new Pose2d(26, 70, 0);
-    public Pose2d middleYellowSpecimenB = new Pose2d(26, 58, 0);
-    public Pose2d rightYellowSpecimenB = new Pose2d(26, 46, 0);
+    public Pose2d leftYellowSpecimenB = new Pose2d(26, 70, Math.toRadians(-90));
+    public Pose2d middleYellowSpecimenB = new Pose2d(26, 58, Math.toRadians(-67.5));
+    public Pose2d rightYellowSpecimenB = new Pose2d(26, 46, Math.toRadians(315));
 
-    public Pose2d redSubmersibleMidpoint = new Pose2d(0, -16, 0);
-    public Pose2d blueSubmersibleMidpoint = new Pose2d(0, 16, 0);
+    public Pose2d redSubmersibleMidpoint = new Pose2d(-28, -8, 0);
+    public Pose2d blueSubmersibleMidpoint = new Pose2d(28, 8, Math.toRadians(180));
 
-    public Pose2d redRungMidpoint = new Pose2d(-24, 0, 0);
-    public Pose2d blueRungMidpoint = new Pose2d(24, 0, 0);
+    public Pose2d redRungMidpoint = new Pose2d(0, -36, 0);
+    public Pose2d blueRungMidpoint = new Pose2d(0, 36, 0);
 
-    public Pose2d redScore = new Pose2d(-48, -48, Math.toRadians(-315));
-    public Pose2d blueScore = new Pose2d(48, 48, Math.toRadians(225));
+    public Pose2d redScore = new Pose2d(-50, -50, Math.toRadians(-315));
+    public Pose2d blueScore = new Pose2d(50, 50, Math.toRadians(225));
 
     public Pose2d redPark = new Pose2d(48,-60, Math.toRadians(90));
     public Pose2d bluePark = new Pose2d(-48, 60, Math.toRadians(90));
+
+    public Pose2d redParkTile = new Pose2d(36, -60, Math.toRadians(90));
+    public Pose2d blueParkTile = new Pose2d(-36, 60, Math.toRadians(90));
 
 
 

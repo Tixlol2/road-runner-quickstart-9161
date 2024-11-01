@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auton;
 
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -18,7 +19,27 @@ public class redPark extends LinearOpMode {
 
         mecDrive = new MecanumDrive(hardwareMap, autoPoints.startRedPark);
         traj1 = mecDrive.actionBuilder(autoPoints.startRedPark)
-                .strafeToConstantHeading(autoPoints.redPark.component1())
+                //Go score specimen
+                .splineToConstantHeading(autoPoints.redRungMidpoint.component1(), autoPoints.startRedPark.component2())
+                .waitSeconds(.5)
+                .strafeToConstantHeading(new Vector2d(autoPoints.redRungMidpoint.component1().x, autoPoints.redScore.component1().y))
+                .strafeToConstantHeading(autoPoints.redParkTile.component1())
+                .waitSeconds(.5)
+                .strafeTo(autoPoints.redParkTile.component1().plus(new Vector2d(0, 48)))
+                .strafeTo(autoPoints.redPark.component1().plus(new Vector2d(0, 48)))
+                .strafeTo(autoPoints.redPark.component1())
+                .waitSeconds(.5)
+                .strafeTo(autoPoints.redPark.component1().plus(new Vector2d(0, 48)))
+                .strafeTo(autoPoints.redPark.component1().plus(new Vector2d(8, 48)))
+                .strafeTo(autoPoints.redPark.component1().plus(new Vector2d(8, 0)))
+                .waitSeconds(.5)
+                .strafeTo(autoPoints.redPark.component1().plus(new Vector2d(8, 48)))
+                .strafeTo(autoPoints.redPark.component1().plus(new Vector2d(12, 48)))
+                .strafeTo(autoPoints.redPark.component1().plus(new Vector2d(12, 0)))
+                .waitSeconds(.5)
+                .strafeTo(autoPoints.redPark.component1().plus(new Vector2d(0, 24)))
+                .waitSeconds(1)
+                .strafeTo(autoPoints.redPark.component1())
                 .build();
         while(!isStarted() && !opModeIsActive()){
             //Init Loop
