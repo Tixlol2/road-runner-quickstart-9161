@@ -7,31 +7,33 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
 @TeleOp
 public class armPIDTesting extends LinearOpMode {
 
-    private PIDController controller;
+    private PIDController angleController;
 
-    public static double p = 0.0028, i = 0.05, d = 0.0002;
-    public static double f = -.15;
+    public static double p = 0.0035, i = 0.05, d = 0.0003;
+    public static double fAngle = .25;
 
-    public static int target = 0;
+    public static int angleTarget = 0;
 
-    private final double ticks_in_degree = (751.8 * 4) / 360;
+    private final double ticks_in_degree = (751.8 * 3) / 360;
 
     private final double ticks_in_inch = ticks_in_degree / 4.409;
 
-    private DcMotorEx arm_motor;
+    private DcMotorEx angleMotor;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        controller = new PIDController(p, i, d);
+        angleController = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        arm_motor = hardwareMap.get(DcMotorEx.class, "armAng");
+        angleMotor = hardwareMap.get(DcMotorEx.class, "armAng");
+        angleMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
 
@@ -39,17 +41,26 @@ public class armPIDTesting extends LinearOpMode {
 
         while(!isStopRequested()){
 
-            //controller.setPID(p, i, d);
-            int armPos = arm_motor.getCurrentPosition();
-            double pidPower = controller.calculate(armPos, target);
-            double feedForward = Math.cos(Math.toRadians(armPos / ticks_in_degree)) * f;
+            double armAngle = angleMotor.getCurrentPosition();
+            angleController.setPID(p,i,d);
 
-            double power = pidPower + feedForward;
 
-            arm_motor.setPower(power);
 
-            telemetry.addData("Current Pos: ", armPos);
-            telemetry.addData("Current Target: ", target);
+            // CLamping
+
+            angleTarget = Math.max(10, Math.min(550, angleTarget));
+
+            //Angle motor
+            double anglePIDFpower = angleController.calculate(armAngle, angleTarget);
+            double anglefeedForward = Math.cos(Math.toRadians(-armAngle / ticks_in_degree)) * fAngle;
+            double anglePower = Math.max(-0.8, Math.min(0.8, anglePIDFpower + anglefeedForward));
+
+            angleMotor.setPower(anglePower);
+
+
+            telemetry.addData("Current Pos: ", armAngle);
+            telemetry.addData("Current Target: ", angleTarget);
+            telemetry.addData("Power", anglePower);
 
             telemetry.update();
 
