@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -26,7 +27,28 @@ public class bluePark extends LinearOpMode {
         mecDrive = new MecanumDrive(hardwareMap, autoPoints.startBluePark);
 
         traj1 = mecDrive.actionBuilder(autoPoints.startBluePark)
-                .strafeToConstantHeading(autoPoints.bluePark.component1())
+                //Go score specimen
+                .splineToConstantHeading(autoPoints.blueRungMidpoint.component1(), autoPoints.startBluePark.component2())
+                .waitSeconds(.5)
+                .strafeToConstantHeading(new Vector2d(autoPoints.blueRungMidpoint.component1().x, autoPoints.blueScore.component1().y))
+                .strafeToConstantHeading(autoPoints.blueParkTile.component1())
+                .turnTo(0)
+                .waitSeconds(.5)
+                .strafeTo(autoPoints.blueParkTile.component1().plus(new Vector2d(0, -48)))
+                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(0, -48)))
+                .strafeTo(autoPoints.bluePark.component1())
+                .waitSeconds(.5)
+                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(0, -48)))
+                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-8, -48)))
+                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-8, 0)))
+                .waitSeconds(.5)
+                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-8, -48)))
+                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-12, -48)))
+                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-12, 0)))
+                .waitSeconds(.5)
+                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(0, -24)))
+                .waitSeconds(1)
+                .strafeTo(autoPoints.bluePark.component1())
                 .build();
         while(!isStarted() && !opModeIsActive()){
             //Init Loop
