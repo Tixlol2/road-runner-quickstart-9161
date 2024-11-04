@@ -21,29 +21,29 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(autoPoints.startBluePark)
-                //Go score specimen
-                .splineToConstantHeading(autoPoints.blueRungMidpoint.component1(), autoPoints.startBluePark.component2())
+        myBot.runAction(myBot.getDrive().actionBuilder(autoPoints.startRedScore)
+                //Gets in position to score red Specimen on high bar, this goess to the midpoint but we can offset the x
+                .splineToConstantHeading(autoPoints.redRungMidpoint.component1(), autoPoints.startRedScore.component2())
                 .waitSeconds(.5)
-                .strafeToConstantHeading(new Vector2d(autoPoints.blueRungMidpoint.component1().x, autoPoints.blueScore.component1().y))
-                .strafeToConstantHeading(autoPoints.blueParkTile.component1())
-                        .turnTo(0)
+                //Navigates to the red score zone
+                .strafeToConstantHeading(new Vector2d(autoPoints.redRungMidpoint.component1().x, autoPoints.redScore.component1().y))
+                .strafeToConstantHeading(autoPoints.redScore.component1())
                 .waitSeconds(.5)
-                .strafeTo(autoPoints.blueParkTile.component1().plus(new Vector2d(0, -48)))
-                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(0, -48)))
-                .strafeTo(autoPoints.bluePark.component1())
+                //Grab the right yellow and then score in the high basket
+                .turnTo(autoPoints.redScore.component2())
                 .waitSeconds(.5)
-                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(0, -48)))
-                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-8, -48)))
-                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-8, 0)))
+                //Grab the middle yellow and then score in the high basket
+                .turnTo(autoPoints.middleYellowSpecimenR.component2())
                 .waitSeconds(.5)
-                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-8, -48)))
-                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-12, -48)))
-                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(-12, 0)))
+                .turnTo(autoPoints.redScore.component2())
                 .waitSeconds(.5)
-                .strafeTo(autoPoints.bluePark.component1().plus(new Vector2d(0, -24)))
-                .waitSeconds(1)
-                .strafeTo(autoPoints.bluePark.component1())
+                //Grab the left yellow and then score in the high basket
+                .turnTo(autoPoints.rightYellowSpecimenR.component2())
+                .waitSeconds(.5)
+                .turnTo(autoPoints.redScore.component2())
+                .waitSeconds(.5)
+                .splineToLinearHeading(autoPoints.redSubmersibleMidpoint, autoPoints.redSubmersibleMidpoint.component2())
+                .turnTo(Math.toRadians(180))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

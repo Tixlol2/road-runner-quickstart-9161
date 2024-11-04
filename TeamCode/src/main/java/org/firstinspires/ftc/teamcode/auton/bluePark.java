@@ -22,6 +22,7 @@ public class bluePark extends LinearOpMode {
         autonPoints autoPoints = new autonPoints();
         Action traj1;
         ClawSubsystemRoadRunner clawSubsystem = new ClawSubsystemRoadRunner(hardwareMap);
+        ArmSubsystemRoadRunner armSubsystem = new ArmSubsystemRoadRunner(hardwareMap);
 
         mecDrive = new MecanumDrive(hardwareMap, autoPoints.startBluePark);
 
