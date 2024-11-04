@@ -20,7 +20,7 @@ public class armSubsystem extends SubsystemBase {
 
 
 
-    private static final double pAngle = 0.0035, iAngle = 0.05, dAngle = 0, fAngle = 0;
+    private static final double pAngle = 0.0035, iAngle = 0.05, dAngle = 0, fAngle = 0.3;
 
     private static final double ticks_in_degree = (751.8 * 3) / 360;
 
@@ -85,9 +85,9 @@ public class armSubsystem extends SubsystemBase {
     // Calculations
     // ----------------
 
-    public void motorCalculations(int angleTarget, int extendTarget) {
-        this.angleTarget = angleTarget;
-        this.extTarget = extendTarget;
+    public void motorCalculations(int setAngleTarget, int setExtendTarget) {
+        angleTarget = setAngleTarget;
+        extTarget = setExtendTarget;
         double anglePower;
         double extendPower;
         double anglefeedForward;
@@ -103,19 +103,20 @@ public class armSubsystem extends SubsystemBase {
 
         // CLamping
 
-        angleTarget = Math.min(angleMin, Math.max(angleMax, angleTarget));
-        extendTarget = (int) Math.min(extMin, Math.max(Math.min(extMax, extMax - ((extMax - 20*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree)))), extendTarget));
+        angleTarget = Math.max(angleMin, Math.min(angleMax, angleTarget));
+        extTarget = (int) Math.max(extMin, Math.min(Math.min(extMax, extMax - ((extMax - 20*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree)))), extTarget));
 
         //Angle motor
-
+        angleController.setPID(pAngle,iAngle,dAngle);
         anglePIDFpower = angleController.calculate(armAngle, angleTarget);
         anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
-        anglePower = Math.min(-0.8, Math.max(0.8, anglePIDFpower + anglefeedForward));
+        anglePower = Math.max(-0.8, Math.min(0.8, anglePIDFpower + anglefeedForward));
 
         angleMotor.setPower(anglePower);
 
         //Extension motor
-        extendPower = Math.min(-0.8, Math.max(0.8, extendController.calculate(extenderMotor.getCurrentPosition(), extendTarget)));
+        extendController.setPID(pExtend,iExtend,dExtend);
+        extendPower = Math.max(-0.8, Math.min(0.8, extendController.calculate(extenderMotor.getCurrentPosition(), extTarget)));
 
         extenderMotor.setPower(extendPower);
     }

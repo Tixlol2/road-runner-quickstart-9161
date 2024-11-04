@@ -116,7 +116,7 @@ public class Drive extends LinearOpMode {
 
             //Testing armSubsystem
             clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.1 * gp2Deflator);
-            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * -4 * gp2Deflator);
+            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * -12 * gp2Deflator);
             extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * -40 * gp2Deflator);
 
 
@@ -124,22 +124,25 @@ public class Drive extends LinearOpMode {
             // ----------------------------
             // Telemetry
             // ----------------------------
-
-            telemetry.addData("Current Angle in Ticks: ", armSubsystem.getAnglePos());
-            telemetry.addData("Current Angle Target in Ticks: ", angleTarget);
-
-
-            telemetry.addData("Current Extension in Ticks: ", armSubsystem.getExtenderPos());
-            telemetry.addData("Current Extension Target in Ticks: ", extendTarget);
-
-
-            telemetry.addData("Arm Angle: ", armSubsystem.getAnglePosDEG());
-            telemetry.addData("Arm extension: ", armSubsystem.getExtenderPosIN());
-
-
-            telemetry.addLine("Don't Crash!");
-            telemetry.addData("Driver Centric?", driveCentric);
-
+//
+//            telemetry.addData("Current Angle in Ticks: ", armSubsystem.getAnglePos());
+//            telemetry.addData("Current Angle Target in Ticks: ", angleTarget);
+//
+//
+//            telemetry.addData("Current Extension in Ticks: ", armSubsystem.getExtenderPos());
+//            telemetry.addData("Current Extension Target in Ticks: ", extendTarget);
+//
+//
+//            telemetry.addData("Arm Angle: ", armSubsystem.getAnglePosDEG());
+//            telemetry.addData("Arm extension: ", armSubsystem.getExtenderPosIN());
+//
+//            telemetry.addData("Arm subsystem Angle Target:", armSubsystem.getAngleTarget());
+//            telemetry.addData("Arm subsystem Extension Target:", armSubsystem.getExtTarget());
+//
+//
+//            telemetry.addLine("Don't Crash!");
+//            telemetry.addData("Driver Centric?", driveCentric);
+//
 
 
             // ---------------
@@ -158,13 +161,14 @@ public class Drive extends LinearOpMode {
 
             mecDrive.setDrivePowers(new PoseVelocity2d(
                     new Vector2d(
-                            gp1Deflator *  (driveCentric ? (gamepad1.left_stick_y* Math.cos(mecDrive.pose.heading.toDouble()) - gamepad1.left_stick_x * Math.sin(mecDrive.pose.heading.toDouble())) : -gamepad1.left_stick_y),
-                            gp1Deflator * (driveCentric ? (gamepad1.left_stick_y* Math.sin(mecDrive.pose.heading.toDouble()) + gamepad1.left_stick_x * Math.cos(mecDrive.pose.heading.toDouble())) : -gamepad1.left_stick_x)) ,
+                            gp1Deflator *  (driveCentric ? (-gamepad1.left_stick_y* Math.cos(-mecDrive.pose.heading.toDouble()) - -gamepad1.left_stick_x * Math.sin(-mecDrive.pose.heading.toDouble())) : -gamepad1.left_stick_y),
+                            gp1Deflator * (driveCentric ? (-gamepad1.left_stick_y* Math.sin(-mecDrive.pose.heading.toDouble()) + -gamepad1.left_stick_x * Math.cos(-mecDrive.pose.heading.toDouble())) : -gamepad1.left_stick_x)) ,
                     -gamepad1.right_stick_x* gp1Deflator
             ));
 
 
-
+            angleTarget = armSubsystem.getAngleTarget();
+            extendTarget = armSubsystem.getExtTarget();
             telemetry.update();
         }
 
