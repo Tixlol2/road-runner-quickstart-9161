@@ -24,6 +24,7 @@ public class redPark extends LinearOpMode {
                 .waitSeconds(.5)
                 .strafeToConstantHeading(new Vector2d(autoPoints.redRungMidpoint.component1().x, autoPoints.redScore.component1().y))
                 .strafeToConstantHeading(autoPoints.redParkTile.component1())
+                .turnTo(0)
                 .waitSeconds(.5)
                 .strafeTo(autoPoints.redParkTile.component1().plus(new Vector2d(0, 48)))
                 .strafeTo(autoPoints.redPark.component1().plus(new Vector2d(0, 48)))
