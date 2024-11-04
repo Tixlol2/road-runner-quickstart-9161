@@ -53,7 +53,7 @@ public class bluePark extends LinearOpMode {
             //Init Loop
             Actions.runBlocking(new ParallelAction(
                     clawSubsystem.closeClaw(),
-                    clawSubsystem.setAngle(.5)
+                    clawSubsystem.setAngle(.1)
             ));
 
         }
