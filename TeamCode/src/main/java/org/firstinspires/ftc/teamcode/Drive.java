@@ -69,7 +69,7 @@ public class Drive extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         //hMap, name of servo used for claw
-        clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver");
+        clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver", "clawWrist");
         //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
 //        armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem, 0,0 );
@@ -110,7 +110,7 @@ public class Drive extends LinearOpMode {
             if (gamepad2.x) {
                 clawTarget = 1;
             } else if (gamepad2.y) {
-                clawTarget = 0;
+                clawTarget = 0.4;
 
             }
 
@@ -151,11 +151,11 @@ public class Drive extends LinearOpMode {
 
 
 
-            armSubsystem.motorCalculations(angleTarget,extendTarget);
+            armSubsystem.update(angleTarget,extendTarget);
             // ----------------------------
             // Updaters
             // ----------------------------
-
+            clawTarget = Math.max(0.4, Math.min(1, clawTarget));
             clawSubsystem.setAnglePosition(clawTarget);
             mecDrive.updatePoseEstimate();
 

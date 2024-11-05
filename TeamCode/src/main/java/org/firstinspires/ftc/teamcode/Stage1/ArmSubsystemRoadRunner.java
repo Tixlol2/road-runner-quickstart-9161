@@ -4,47 +4,49 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
-public class ArmSubsystemRoadRunner {
+public class ArmSubsystemRoadRunner extends armSubsystem {
 
-    private DcMotorEx armAng;
-    private DcMotorEx armExt;
 
-    public double angleTarget;
 
-    private static final double ticks_in_degree = (751.8 * 3) / 360;
 
-    private static final double ticks_in_inch = 537.7 / (112 / 25.4);
 
     public ArmSubsystemRoadRunner(HardwareMap hardwareMap){
-        this.armAng = hardwareMap.get(DcMotorEx.class, "armAng");
-        this.armExt = hardwareMap.get(DcMotorEx.class, "armExt");
+        super(hardwareMap, "armExt", "armAng");
+
 
     }
 
-    public class ExtendInches implements Action {
+    public class setPosrr implements Action {
+
+        Vector2d pos;
+        int ang;
+        int ext;
+
+        public setPosrr(Vector2d pos) {
+            this.pos = pos;
+        }
+
+        public setPosrr(int ext, int ang) {
+            this.ext = ext;
+            this.ang = ang;
+        }
+
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-
-            return true;
+            if (pos != null)  setPos(pos);
+            else ArmSubsystemRoadRunner.this.setPosrr(ext, ang);
+            return getAngleTarget() != getAnglePos() && getExtTarget() != getExtenderPos();
         }
     }
-    public Action extendInches(double inches) {
-        return new CloseClaw();
-    }
+    public Action setPosrr(Vector2d pos) {
+        return new setPosrr(pos);
 
-    public class OpenClaw implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket packet) {
-
-            return true;
-        }
     }
-    public Action openClaw() {
-        return new OpenClaw();
+    public Action setPosrr(int ext, int ang) {
+        return new setPosrr(ext, ang);
     }
 
 
