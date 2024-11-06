@@ -28,6 +28,7 @@ public class Drive extends LinearOpMode {
     int angleTarget = 10;
     int extendTarget = 10;
     double clawTarget = 0;
+    double clawWrist = 0;
 
 
 
@@ -115,7 +116,8 @@ public class Drive extends LinearOpMode {
             }
 
             //Testing armSubsystem
-            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.1 * gp2Deflator);
+            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.05 * gp2Deflator);
+            clawWrist = gamepad2.dpad_left ? 0 : gamepad2.dpad_right ? 1 : gamepad2.dpad_up ? 0.5 : clawWrist;
             angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * -12 * gp2Deflator);
             extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * -40 * gp2Deflator);
 
@@ -155,8 +157,10 @@ public class Drive extends LinearOpMode {
             // ----------------------------
             // Updaters
             // ----------------------------
-            clawTarget = Math.max(0.4, Math.min(1, clawTarget));
+            clawTarget = Math.max(armSubsystem.getExtenderPos() < 30 ? 0.3: 0, Math.min(1, clawTarget));
+            clawWrist = Math.max(0, Math.min(1, clawWrist));
             clawSubsystem.setAnglePosition(clawTarget);
+            clawSubsystem.setWristPosition(clawWrist);
             mecDrive.updatePoseEstimate();
 
             mecDrive.setDrivePowers(new PoseVelocity2d(
