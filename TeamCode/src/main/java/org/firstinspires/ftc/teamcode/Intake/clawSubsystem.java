@@ -10,7 +10,7 @@ public class clawSubsystem extends SubsystemBase {
     public final Servo driverOfClaw;
     public final Servo wristOfClaw;
     //TODO: Figure out what these values are
-    public final double open = .4;
+    public final double open = 0;
     public final double closed = 1;
 
 
@@ -29,6 +29,6 @@ public class clawSubsystem extends SubsystemBase {
         driverOfClaw.setPosition(closed);
     }
     //Using a dorect connection, this should hold up
-    public void setAnglePosition(double position){angleOfClaw.setPosition(Math.max(0.4, Math.min(1, position)));}
+    public void setAnglePosition(double position){angleOfClaw.setPosition(Math.max(0, Math.min(1, position)));}
     public void setWristPosition(double position){wristOfClaw.setPosition(position);}
 }
