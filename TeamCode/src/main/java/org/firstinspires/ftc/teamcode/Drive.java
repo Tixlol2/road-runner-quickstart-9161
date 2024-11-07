@@ -111,9 +111,10 @@ public class Drive extends LinearOpMode {
             if (gamepad2.x) {
                 clawTarget = 1;
             } else if (gamepad2.y) {
-                clawTarget = 0.4;
-
+                clawTarget = 0;
             }
+            if (gamepad2.dpad_down){clawSubsystem.setWristPosition(1);}
+            else if (gamepad2.dpad_up){clawSubsystem.setWristPosition(1);}
 
             //Testing armSubsystem
             clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.05 * gp2Deflator);
@@ -162,7 +163,6 @@ public class Drive extends LinearOpMode {
             clawSubsystem.setAnglePosition(clawTarget);
             clawSubsystem.setWristPosition(clawWrist);
             mecDrive.updatePoseEstimate();
-
             mecDrive.setDrivePowers(new PoseVelocity2d(
                     new Vector2d(
                             gp1Deflator *  (driveCentric ? (-gamepad1.left_stick_y* Math.cos(-mecDrive.pose.heading.toDouble()) - -gamepad1.left_stick_x * Math.sin(-mecDrive.pose.heading.toDouble())) : -gamepad1.left_stick_y),
@@ -173,6 +173,7 @@ public class Drive extends LinearOpMode {
 
             angleTarget = armSubsystem.getAngleTarget();
             extendTarget = armSubsystem.getExtTarget();
+            telemetry.addLine("Lock In \uD83D\uDD25 \uD83D\uDD25 \uD83D\uDD25");
             telemetry.update();
         }
 
