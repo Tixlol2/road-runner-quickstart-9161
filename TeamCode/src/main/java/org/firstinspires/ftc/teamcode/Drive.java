@@ -173,7 +173,7 @@ public class Drive extends LinearOpMode {
 
             angleTarget = armSubsystem.getAngleTarget();
             extendTarget = armSubsystem.getExtTarget();
-            telemetry.addLine("Lock In \uD83D\uDD25 \uD83D\uDD25 \uD83D\uDD25");
+            telemetry.addLine("Lock In 🔥 🔥 🔥");
             telemetry.update();
         }
 
