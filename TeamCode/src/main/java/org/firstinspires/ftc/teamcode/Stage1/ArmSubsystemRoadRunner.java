@@ -14,7 +14,7 @@ public class ArmSubsystemRoadRunner extends armSubsystem {
 
 
     public ArmSubsystemRoadRunner(HardwareMap hardwareMap){
-        super(hardwareMap, "armExt", "armAng");
+        super(hardwareMap, "armExt", "armAng", 0.0045, 0.12, 0.0008, 0.3, 0.008, 0.05, 0);
 
 
     }
@@ -38,7 +38,8 @@ public class ArmSubsystemRoadRunner extends armSubsystem {
         public boolean run(@NonNull TelemetryPacket packet) {
             if (pos != null)  setPos(pos);
             else ArmSubsystemRoadRunner.this.setPosrr(ext, ang);
-            return getAngleTarget() != getAnglePos() && getExtTarget() != getExtenderPos();
+            update();
+            return !((getAngleTarget()+5) >= getAnglePos() && ((getAngleTarget()-5) <= getAnglePos())) && getExtTarget() != getExtenderPos();
         }
     }
     public Action setPosrr(Vector2d pos) {

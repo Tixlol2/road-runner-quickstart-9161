@@ -27,8 +27,8 @@ public class Drive extends LinearOpMode {
 
     int angleTarget = 10;
     int extendTarget = 10;
-    double clawTarget = 0;
-    double clawWrist = 0;
+    double clawTarget = 1;
+    double clawWrist = 0.5;
 
 
 
@@ -119,32 +119,36 @@ public class Drive extends LinearOpMode {
             clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.05 * gp2Deflator);
             clawWrist = gamepad2.dpad_left ? 0 : gamepad2.dpad_right ? 1 : gamepad2.dpad_up ? 0.5 : clawWrist;
             angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * -12 * gp2Deflator);
-            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * -40 * gp2Deflator);
+            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * -80 * gp2Deflator);
 
 
 
             // ----------------------------
             // Telemetry
             // ----------------------------
-//
-//            telemetry.addData("Current Angle in Ticks: ", armSubsystem.getAnglePos());
-//            telemetry.addData("Current Angle Target in Ticks: ", angleTarget);
-//
-//
-//            telemetry.addData("Current Extension in Ticks: ", armSubsystem.getExtenderPos());
-//            telemetry.addData("Current Extension Target in Ticks: ", extendTarget);
-//
-//
-//            telemetry.addData("Arm Angle: ", armSubsystem.getAnglePosDEG());
-//            telemetry.addData("Arm extension: ", armSubsystem.getExtenderPosIN());
-//
-//            telemetry.addData("Arm subsystem Angle Target:", armSubsystem.getAngleTarget());
-//            telemetry.addData("Arm subsystem Extension Target:", armSubsystem.getExtTarget());
-//
-//
-//            telemetry.addLine("Don't Crash!");
-//            telemetry.addData("Driver Centric?", driveCentric);
-//
+
+            telemetry.addData("Current Angle in Ticks: ", armSubsystem.getAnglePos());
+            telemetry.addData("Current Angle Target in Ticks: ", angleTarget);
+
+
+            telemetry.addData("Current Extension in Ticks: ", armSubsystem.getExtenderPos());
+            telemetry.addData("Current Extension Target in Ticks: ", extendTarget);
+
+
+
+            telemetry.addData("Arm Angle: ", armSubsystem.getAnglePosDEG());
+            telemetry.addData("Arm extension: ", armSubsystem.getExtenderPosIN());
+
+            telemetry.addData("Arm subsystem Angle Target:", armSubsystem.getAngleTarget());
+            telemetry.addData("Arm subsystem Extension Target:", armSubsystem.getExtTarget());
+
+            telemetry.addData("X: ", armSubsystem.getX());
+            telemetry.addData("Y: ", armSubsystem.getY());
+
+
+            telemetry.addLine("Don't Crash!");
+            telemetry.addData("Driver Centric?", driveCentric);
+
 
 
             // ---------------

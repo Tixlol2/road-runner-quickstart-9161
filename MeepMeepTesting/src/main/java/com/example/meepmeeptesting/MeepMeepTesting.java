@@ -43,7 +43,6 @@ public class MeepMeepTesting {
                 .turnTo(autoPoints.redScore.component2())
                 .waitSeconds(.5)
                 .splineToLinearHeading(autoPoints.redSubmersibleMidpoint, autoPoints.redSubmersibleMidpoint.component2())
-                .turnTo(Math.toRadians(180))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
