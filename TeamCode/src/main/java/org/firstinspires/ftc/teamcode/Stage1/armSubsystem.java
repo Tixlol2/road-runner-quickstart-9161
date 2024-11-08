@@ -17,7 +17,8 @@ public class armSubsystem extends SubsystemBase {
 
 
 
-    private static final double pAngle = 0.0035, iAngle = 0.05, dAngle = 0, fAngle = 0.3;
+    private static final double pAngle = 0.0035, iAngle = 0.05, dAngle = 0;
+    private static double fAngle = 0.3;
 
     private static final double ticks_in_degree = (751.8 * 3) / 360;
 
@@ -32,7 +33,7 @@ public class armSubsystem extends SubsystemBase {
     private int extPos;
     private int extTarget;
 
-    private static final int angleMin = 15;
+    private static final int angleMin = 0;
     private static final int angleMax = 550;
     private static final int extMin = 0;
     private static final int extMax = 3400;
@@ -52,6 +53,27 @@ public class armSubsystem extends SubsystemBase {
 
         extenderMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         angleMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        angleController.setPID(pAngle, iAngle, dAngle);
+        extendController.setPID(pExtend, iExtend, dExtend);
+
+
+    }
+
+    public armSubsystem(final HardwareMap hmap, final String extension, final String angle, final double pAngle, final double iAngle, final double dAngle, final double fAngle, final double pExtend, final double iExtend, final double dExtend){
+        extenderMotor = hmap.get(DcMotorEx.class, extension);
+        angleMotor = hmap.get(DcMotorEx.class, angle);
+
+        extenderMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        angleMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        extenderMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        angleMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        angleController.setPID(pAngle, iAngle, dAngle);
+        extendController.setPID(pExtend, iExtend, dExtend);
+
+        this.fAngle = fAngle;
 
 
     }
@@ -82,7 +104,8 @@ public class armSubsystem extends SubsystemBase {
     public int getExtenderPos(){return extenderMotor.getCurrentPosition();}
     public double getExtenderPosIN(){return (extenderMotor.getCurrentPosition() / ticks_in_inch);}
 
-
+    public double getX(){return (extenderMotor.getCurrentPosition()/ticks_in_inch +18)* Math.cos(Math.toRadians(angleMotor.getCurrentPosition()/ticks_in_degree));}
+    public double getY(){return (extenderMotor.getCurrentPosition()/ticks_in_inch +18) * Math.sin(Math.toRadians(angleMotor.getCurrentPosition()/ticks_in_degree));}
     // ----------------
     // Calculations
     // ----------------
@@ -109,15 +132,15 @@ public class armSubsystem extends SubsystemBase {
         extTarget = (int) Math.max(extMin, Math.min(Math.min(extMax, extMax - ((extMax - 20*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree)))), extTarget));
 
         //Angle motor
-        angleController.setPID(pAngle,iAngle,dAngle);
+        //angleController.setPID(pAngle,iAngle,dAngle);
         anglePIDFpower = angleController.calculate(armAngle, angleTarget);
         anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
-        anglePower = Math.max(-0.8, Math.min(0.8, anglePIDFpower + anglefeedForward));
+        anglePower = Math.max(-0.4, Math.min(0.8, anglePIDFpower + anglefeedForward));
 
         angleMotor.setPower(anglePower);
 
         //Extension motor
-        extendController.setPID(pExtend,iExtend,dExtend);
+        //extendController.setPID(pExtend,iExtend,dExtend);
         extendPower = Math.max(-0.8, Math.min(0.8, extendController.calculate(extenderMotor.getCurrentPosition(), extTarget)));
 
         extenderMotor.setPower(extendPower);
@@ -142,15 +165,15 @@ public class armSubsystem extends SubsystemBase {
         extTarget = (int) Math.max(extMin, Math.min(Math.min(extMax, extMax - ((extMax - 20*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree)))), extTarget));
 
         //Angle motor
-        angleController.setPID(pAngle,iAngle,dAngle);
+        //angleController.setPID(pAngle,iAngle,dAngle);
         anglePIDFpower = angleController.calculate(armAngle, angleTarget);
         anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
-        anglePower = Math.max(-0.8, Math.min(0.8, anglePIDFpower + anglefeedForward));
+        anglePower = Math.max(-0.4, Math.min(1, anglePIDFpower + anglefeedForward));
 
         angleMotor.setPower(anglePower);
 
         //Extension motor
-        extendController.setPID(pExtend,iExtend,dExtend);
+        //extendController.setPID(pExtend,iExtend,dExtend);
         extendPower = Math.max(-0.8, Math.min(0.8, extendController.calculate(extenderMotor.getCurrentPosition(), extTarget)));
 
         extenderMotor.setPower(extendPower);
