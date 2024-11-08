@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
@@ -30,7 +31,7 @@ public class redScore extends LinearOpMode {
         MecanumDrive mecDrive;
         autonPoints autoPoints = new autonPoints();
         Action traj1;
-        Action traj2;
+        Action score;
         ClawSubsystemRoadRunner clawSubsystem = new ClawSubsystemRoadRunner(hardwareMap);
         ArmSubsystemRoadRunner armSubsystem = new ArmSubsystemRoadRunner(hardwareMap);
 
@@ -39,9 +40,7 @@ public class redScore extends LinearOpMode {
 
         mecDrive = new MecanumDrive(hardwareMap, autoPoints.startRedScore);
 
-        traj2 = mecDrive.actionBuilder(new Pose2d(autoPoints.redRungMidpoint.component1().x, autoPoints.redScore.component1().y, autoPoints.startRedScore.component2().real))
-                .strafeToConstantHeading(autoPoints.redScore.component1())
-                .build();
+
 
         traj1 = mecDrive.actionBuilder(autoPoints.startRedScore)
 //Gets in position to score red Specimen on high bar, this goess to the midpoint but we can offset the x
@@ -55,60 +54,81 @@ public class redScore extends LinearOpMode {
                 .stopAndAdd(armSubsystem.setPosrr(new Vector2d(18,18)))
                 //Navigates to the red score zone
                 .strafeToConstantHeading(new Vector2d(autoPoints.redRungMidpoint.component1().x, autoPoints.redScore.component1().y))
-                .stopAndAdd(new ParallelAction())
                 .strafeToConstantHeading(autoPoints.redScore.component1())
-                .stopAndAdd(new ParallelAction(
+                .stopAndAdd(new SequentialAction(
+                        new ParallelAction(
+                                //Sets arm to hover over the right block
                         armSubsystem.setPosrr(new Vector2d(32, 3)),
                         clawSubsystem.setAngle(0)
+                        ),
+                        //Closes the claw and gets it ready to score
+                        clawSubsystem.closeClaw(),
+                        clawSubsystem.setAngle(.5),
+                        armSubsystem.setPosrr(new Vector2d(18,18))
                 ))
-                .stopAndAdd(clawSubsystem.closeClaw())
-                .stopAndAdd(clawSubsystem.setAngle(1))
-                .stopAndAdd(clawSubsystem.openClaw())
-                .stopAndAdd(clawSubsystem.setAngle(0.5))
-                //Grab the right yellow and then score in the high basket
-                .stopAndAdd(armSubsystem.setPosrr(new Vector2d(18,18)))
+                //Turn to face the tower
                 .turnTo(autoPoints.redScore.component2())
-                .stopAndAdd(armSubsystem.setPosrr(new Vector2d(1.5, 46)))
+                //Scores the block
+                .stopAndAdd(new SequentialAction(
+                        armSubsystem.setPosrr(new Vector2d(1.5, 46)),
+                        clawSubsystem.setAngle(1),
+                        clawSubsystem.openClaw(),
+                        clawSubsystem.setAngle(0.5),
+                        armSubsystem.setPosrr(new Vector2d(18,18))
+                ))
+                //Allows the time to score
                 .waitSeconds(1)
                 //Grab the middle yellow and then score in the high basket
                 .stopAndAdd(armSubsystem.setPosrr(new Vector2d(18,18)))
                 .waitSeconds(0.1)
                 .turnTo(autoPoints.middleYellowSpecimenR.component2())
-                .stopAndAdd(new ParallelAction(
-                        armSubsystem.setPosrr(new Vector2d(34.5, 4.5)),
-                        clawSubsystem.setAngle(0)
+                .stopAndAdd(new SequentialAction(
+                        new ParallelAction(
+                                //Sets arm to hover over the middle block
+                                armSubsystem.setPosrr(new Vector2d(32, 3)),
+                                clawSubsystem.setAngle(0)
+                        ),
+                        //Closes the claw and gets it ready to score
+                        clawSubsystem.closeClaw(),
+                        clawSubsystem.setAngle(.5),
+                        armSubsystem.setPosrr(new Vector2d(18,18))
                 ))
-                .waitSeconds(0.1)
-                .stopAndAdd(clawSubsystem.closeClaw())
-                .stopAndAdd(armSubsystem.setPosrr(new Vector2d(18,18)))
+                //Turn to face the tower
                 .turnTo(autoPoints.redScore.component2())
-                .stopAndAdd(armSubsystem.setPosrr(new Vector2d(1.5, 46)))
-                .waitSeconds(1)
-                .stopAndAdd(clawSubsystem.setAngle(1))
-                .stopAndAdd(clawSubsystem.openClaw())
-                .stopAndAdd(clawSubsystem.setAngle(0.5))
-                .stopAndAdd(armSubsystem.setPosrr(new Vector2d(18,18)))
-                .waitSeconds(0.1)
+                //Scores the block
+                .stopAndAdd(new SequentialAction(
+                        armSubsystem.setPosrr(new Vector2d(1.5, 46)),
+                        clawSubsystem.setAngle(1),
+                        clawSubsystem.openClaw(),
+                        clawSubsystem.setAngle(0.5),
+                        armSubsystem.setPosrr(new Vector2d(18,18))
+                ))
+
+
                 //Grab the left yellow and then score in the high basket
                 .turnTo(autoPoints.rightYellowSpecimenR.component2())
-                .stopAndAdd(new ParallelAction(
-                        armSubsystem.setPosrr(new Vector2d(38, 6)),
-                        clawSubsystem.setAngle(0)
+                .stopAndAdd(new SequentialAction(
+                        new ParallelAction(
+                                //Sets arm to hover over the right block
+                                armSubsystem.setPosrr(new Vector2d(38, 6)),
+                                clawSubsystem.setAngle(0)
+                        ),
+                        //Closes the claw and gets it ready to score
+                        clawSubsystem.closeClaw(),
+                        clawSubsystem.setAngle(.5),
+                        armSubsystem.setPosrr(new Vector2d(18,18))
                 ))
-                .stopAndAdd(clawSubsystem.closeClaw())
-                .stopAndAdd(armSubsystem.setPosrr(new Vector2d(18,18)))
+                //Turn to face the tower
                 .turnTo(autoPoints.redScore.component2())
-                .stopAndAdd(armSubsystem.setPosrr(new Vector2d(1.5, 46)))
-                .stopAndAdd(clawSubsystem.setAngle(1))
-                .stopAndAdd(clawSubsystem.openClaw())
-                .stopAndAdd(clawSubsystem.setAngle(0.5))
-                .waitSeconds(1)
-                .stopAndAdd(armSubsystem.setPosrr(new Vector2d(18,18)))
-                .stopAndAdd(new ParallelAction(
-                        armSubsystem.setPosrr(new Vector2d(3, 20)),
-                        clawSubsystem.setAngle(1)
+                //Scores the block
+                .stopAndAdd(new SequentialAction(
+                        armSubsystem.setPosrr(new Vector2d(1.5, 46)),
+                        clawSubsystem.setAngle(1),
+                        clawSubsystem.openClaw(),
+                        clawSubsystem.setAngle(0.5),
+                        armSubsystem.setPosrr(new Vector2d(18,18))
                 ))
-                .stopAndAdd(armSubsystem.setPosrr(18,18))
+
                 .splineToLinearHeading(autoPoints.redSubmersibleMidpoint, Math.toRadians(180))
                 .build();
         runningActions.add(traj1);
