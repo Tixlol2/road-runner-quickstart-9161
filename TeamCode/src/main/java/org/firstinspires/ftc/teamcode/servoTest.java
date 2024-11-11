@@ -2,14 +2,17 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Intake.ClawSubsystemRoadRunner;
+
 
 @TeleOp(name="servoTest", group = "Drive")
-@Disabled
+
 public class servoTest extends LinearOpMode {
 
     //Class def
@@ -23,7 +26,7 @@ public class servoTest extends LinearOpMode {
 
         servo = hardwareMap.get(Servo.class, "clawAngle");
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
+        ClawSubsystemRoadRunner clawSubsystem = new ClawSubsystemRoadRunner(hardwareMap);
 
 
 
@@ -34,13 +37,17 @@ public class servoTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad2.b) {
-                servo.setPosition(0);
+
+                Actions.runBlocking(clawSubsystem.setAngle(0));
             } else if (gamepad2.a) {
-                servo.setPosition(1);
+                Actions.runBlocking(clawSubsystem.setAngle(1));
+
             }
             else if (gamepad2.x){
-                servo.setPosition(.5);
+                Actions.runBlocking(clawSubsystem.setAngle(.5));
             }
+
+
         }
     }
 }

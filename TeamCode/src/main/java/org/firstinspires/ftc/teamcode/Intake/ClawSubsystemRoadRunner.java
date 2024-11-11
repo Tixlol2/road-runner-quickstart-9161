@@ -13,8 +13,6 @@ public class ClawSubsystemRoadRunner {
     private Servo clawAngle;
     private Servo clawWrist;
 
-    public double angleTarget;
-    public double wristTarget;
 
     public ClawSubsystemRoadRunner(HardwareMap hardwareMap){
 
@@ -47,30 +45,37 @@ public class ClawSubsystemRoadRunner {
 
 
     public class SetAngle implements Action {
+        double pos;
+        public SetAngle(double pos) {
+            this.pos = pos;
+        }
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            clawAngle.setPosition(angleTarget);
+            clawAngle.setPosition(pos);
+
             return false;
         }
     }
     public Action setAngle(double pos) {
-        angleTarget = pos;
-        return new SetAngle();
+        return new SetAngle(pos);
     }
 
 
     public class SetWrist implements Action {
+        double pos;
+        public SetWrist(double pos) {
+            this.pos = pos;
+        }
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            clawWrist.setPosition(wristTarget);
+            clawWrist.setPosition(pos);
             return false;
         }
     }
     public Action setWrist(double pos) {
-        wristTarget = pos;
-        return new SetWrist();
+        return new SetWrist(pos);
     }
 
 
