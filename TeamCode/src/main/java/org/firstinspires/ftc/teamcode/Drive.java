@@ -32,22 +32,13 @@ public class Drive extends LinearOpMode {
 
 
 
-    //Limelight3A ll3a;
+
     //Follower follower;
     boolean driveCentric;
-    //CommandScheduler commandScheduler;
+
     MecanumDrive mecDrive;
 
-    private PIDController angleController;
-    private PIDController extendController;
 
-
-
-
-    public  double pAngle = .0028, iAngle = 0, dAngle = 0.000, fAngle = -0.01;
-    public static double pExtend = 0.008, iExtend = 0, dExtend = 0;
-    private final double ticks_in_degree = (751.8 * 4) / 360;
-    private final double ticks_in_inch = (537.7 / 112) / 25.4;
 
 
 
@@ -56,13 +47,11 @@ public class Drive extends LinearOpMode {
 
 
         //During Initialization:
-        angleController = new PIDController(pAngle, iAngle, dAngle);
-        extendController = new PIDController(pExtend, iExtend, dExtend);
+
 
         mecDrive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
 
 
-        //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
 
 
 
@@ -73,19 +62,11 @@ public class Drive extends LinearOpMode {
         clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver", "clawWrist");
         //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
-//        armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem, 0,0 );
-
-
 
         waitForStart();
 
 
 
-//        follower = new Follower(hardwareMap);
-//
-//
-//
-//        follower.startTeleopDrive();
 
 
 
