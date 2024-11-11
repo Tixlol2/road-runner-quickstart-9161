@@ -32,13 +32,20 @@ public class Drive extends LinearOpMode {
 
 
 
-
+    //Limelight3A ll3a;
     //Follower follower;
     boolean driveCentric;
-
+    //CommandScheduler commandScheduler;
     MecanumDrive mecDrive;
 
+    private PIDController angleController;
+    private PIDController extendController;
 
+
+
+
+    public  double pAngle = .0028, iAngle = 0, dAngle = 0.000, fAngle = -0.01;
+    public static double pExtend = 0.008, iExtend = 0, dExtend = 0;
 
 
 
@@ -47,11 +54,13 @@ public class Drive extends LinearOpMode {
 
 
         //During Initialization:
+        angleController = new PIDController(pAngle, iAngle, dAngle);
+        extendController = new PIDController(pExtend, iExtend, dExtend);
+
+        mecDrive = new MecanumDrive(hardwareMap, new Pose2d(0,0,Math.PI/2));
 
 
-        mecDrive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
-
-
+        //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
 
 
 
@@ -62,11 +71,19 @@ public class Drive extends LinearOpMode {
         clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver", "clawWrist");
         //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
+//        armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem, 0,0 );
+
+
 
         waitForStart();
 
 
 
+//        follower = new Follower(hardwareMap);
+//
+//
+//
+//        follower.startTeleopDrive();
 
 
 
@@ -75,7 +92,7 @@ public class Drive extends LinearOpMode {
             //Input
             // ----------------------------
 
-            gp2Deflator = gamepad2.left_bumper && gamepad2.right_bumper ? 0.5 : gamepad2.left_bumper ? 0.7 : 1;
+            gp2Deflator = gamepad2.left_bumper ? 0.5 : 1;
             gp1Deflator = gamepad1.left_bumper && gamepad1.right_bumper ? 0.5 : gamepad1.left_bumper ? 0.7 : 1;
 
             if (gamepad1.b) {
@@ -98,11 +115,29 @@ public class Drive extends LinearOpMode {
             else if (gamepad2.dpad_up){clawSubsystem.setWristPosition(1);}
 
             //Testing armSubsystem
-            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.05 * gp2Deflator);
-            clawWrist = gamepad2.dpad_left ? 0 : gamepad2.dpad_right ? 1 : gamepad2.dpad_up ? 0.5 : clawWrist;
+            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.025 * gp2Deflator);
+            clawWrist = gamepad2.dpad_right ? 1 : gamepad2.dpad_up ? 0.5 : clawWrist;
+            if (gamepad2.dpad_left) {
+                armSubsystem.setPos(46,90);
+                clawSubsystem.setAnglePosition(0.5);
+                clawSubsystem.setWristPosition(0.5);
+                angleTarget = armSubsystem.getAngleTarget();
+                extendTarget = armSubsystem.getExtTarget();
+            } else if (gamepad2.dpad_down) {
+                armSubsystem.setPos(22,0);
+                clawTarget = 0;
+                clawSubsystem.setWristPosition(0.5);
+                clawSubsystem.open();
+                angleTarget = armSubsystem.getAngleTarget();
+                extendTarget = armSubsystem.getExtTarget();
+            } else if (gamepad2.left_stick_button) {
+                armSubsystem.setPos(0,45);
+                angleTarget = armSubsystem.getAngleTarget();
+                extendTarget = armSubsystem.getExtTarget();
+            }
+
             angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * -12 * gp2Deflator);
             extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * -80 * gp2Deflator);
-
 
 
             // ----------------------------
@@ -143,7 +178,7 @@ public class Drive extends LinearOpMode {
             // ----------------------------
             // Updaters
             // ----------------------------
-            clawTarget = Math.max(armSubsystem.getExtenderPos() < 30 ? 0.3: 0, Math.min(1, clawTarget));
+            clawTarget = Math.max(armSubsystem.getExtenderPos() < 30 ? 0.4: 0, Math.min(1, clawTarget));
             clawWrist = Math.max(0, Math.min(1, clawWrist));
             clawSubsystem.setAnglePosition(clawTarget);
             clawSubsystem.setWristPosition(clawWrist);
@@ -156,8 +191,7 @@ public class Drive extends LinearOpMode {
             ));
 
 
-            angleTarget = armSubsystem.getAngleTarget();
-            extendTarget = armSubsystem.getExtTarget();
+
             telemetry.addLine("Lock In 🔥 🔥 🔥");
             telemetry.addLine("Improvement Is The First Step to Success");
             telemetry.update();
