@@ -1,82 +1,56 @@
 import cv2
 import numpy as np
 
-# Define the color range for detecting yellow in HSV space
-# Yellow color in HSV: H in [20, 40], S in [100, 255], V in [100, 255]
-lower_yellow = np.array([20, 100, 100])
-upper_yellow = np.array([40, 255, 255])
+# This function is called every frame by Limelight's backend
+def runPipeline(image, llrobot):
+    # Convert the image to HSV color space for easier color thresholding
+    hsv_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-def find_angle_of_prism(image):
-    # Convert the image to HSV space
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    # Define HSV range for red color (two ranges due to HSV wrapping)
+    lower_red1 = np.array([0, 120, 70])
+    upper_red1 = np.array([10, 255, 255])
 
-    # Create a mask for yellow color
-    mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+    lower_red2 = np.array([170, 120, 70])
+    upper_red2 = np.array([180, 255, 255])
 
-    # Find contours in the mask
+    # Create binary masks for red color
+    mask1 = cv2.inRange(hsv_img, lower_red1, upper_red1)
+    mask2 = cv2.inRange(hsv_img, lower_red2, upper_red2)
+
+    # Combine both masks to get the final mask
+    mask = cv2.bitwise_or(mask1, mask2)
+
+    # Find contours in the binary image
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Loop over the contours and look for a rectangular prism
-    for contour in contours:
-        # Approximate the contour to a polygon with fewer vertices
-        epsilon = 0.02 * cv2.arcLength(contour, True)
-        approx = cv2.approxPolyDP(contour, epsilon, True)
+    # Initialize variables for the largest detected rectangle
+    largest_contour = None
+    angle = 0
 
-        # If the polygon has 4 vertices, it's likely a rectangle
-        if len(approx) == 4:
-            # Draw the contour and the bounding box for visual feedback
-            cv2.drawContours(image, [approx], -1, (0, 255, 0), 2)
+    # If contours are found, process the largest one
+    if contours:
+        # Find the largest contour based on area
+        largest_contour = max(contours, key=cv2.contourArea)
 
-            # Get the rotated rectangle and its angle
-            rect = cv2.minAreaRect(approx)
-            box = cv2.boxPoints(rect)  # Get the 4 points of the rectangle
-            box = np.int0(box)  # Convert to integer
+        # Get the bounding box around the contour
+        x, y, w, h = cv2.boundingRect(largest_contour)
 
-            # Draw the rotated rectangle for visual feedback
-            cv2.polylines(image, [box], True, (0, 0, 255), 2)
+        # Calculate the angle of the rectangle using the width and height
+        dx = w  # width difference
+        dy = h  # height difference
 
-            # Get the angle of the rectangle (relative to the horizontal axis)
-            angle = rect[2]
+        # Calculate the angle using atan2, and convert it to degrees
+        angle = np.degrees(np.arctan2(dy, dx))
 
-            # If the angle is negative (rotated clockwise), we convert it to positive for consistency
-            if angle < -45:
-                angle += 90
-
-            # Return the angle of the rectangular prism
-            return angle
-
-    # If no rectangle is found, return None
-    return None
-
-# Main function to capture the video feed and process the frames
-def main():
-    # Initialize the video capture (0 is the default camera)
-    cap = cv2.VideoCapture(0)
-
-    while True:
-        ret, frame = cap.read()
-
-        if not ret:
-            print("Failed to capture image")
-            break
-
-        # Find the angle of the yellow rectangular prism
-        angle = find_angle_of_prism(frame)
+        # Draw the bounding box on the image
+        cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         # Display the angle on the image
-        if angle is not None:
-            cv2.putText(frame, f"Angle: {angle:.2f} degrees", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+        cv2.putText(image, f"Angle: {angle:.2f} degrees", (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
 
-        # Show the image with the detected object and angle
-        cv2.imshow("Image", frame)
+    # Prepare output data for the robot
+    llpython = [angle]  # Output the angle to the robot
 
-        # Break the loop if the 'q' key is pressed
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    # Release the camera and close all OpenCV windows
-    cap.release()
-    cv2.destroyAllWindows()
-
-if __name__ == "__main__":
-    main()
+    # Return the contour, the modified image, and the output data
+    return largest_contour, image, llpython
