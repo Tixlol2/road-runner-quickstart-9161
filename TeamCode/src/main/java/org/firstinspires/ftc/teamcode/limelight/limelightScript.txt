@@ -6,51 +6,89 @@ def runPipeline(image, llrobot):
     # Convert the image to HSV color space for easier color thresholding
     hsv_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    # Define HSV range for red color (two ranges due to HSV wrapping)
-    lower_red1 = np.array([0, 120, 70])
+    # Define HSV ranges for red, blue, and yellow colors
+    lower_red1 = np.array([0, 70, 70])
     upper_red1 = np.array([10, 255, 255])
-
-    lower_red2 = np.array([170, 120, 70])
+    lower_red2 = np.array([170, 70, 70])
     upper_red2 = np.array([180, 255, 255])
 
-    # Create binary masks for red color
-    mask1 = cv2.inRange(hsv_img, lower_red1, upper_red1)
-    mask2 = cv2.inRange(hsv_img, lower_red2, upper_red2)
+    lower_blue = np.array([100, 100, 60])
+    upper_blue = np.array([160, 255, 255])
 
-    # Combine both masks to get the final mask
-    mask = cv2.bitwise_or(mask1, mask2)
+    lower_yellow = np.array([10, 0, 100])
+    upper_yellow = np.array([30, 255, 255])
 
-    # Find contours in the binary image
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Create binary masks for red, blue, and yellow colors
+    mask_red = cv2.bitwise_or(cv2.inRange(hsv_img, lower_red1, upper_red1), cv2.inRange(hsv_img, lower_red2, upper_red2))
+    mask_blue = cv2.inRange(hsv_img, lower_blue, upper_blue)
+    mask_yellow = cv2.inRange(hsv_img, lower_yellow, upper_yellow)
 
-    # Initialize variables for the largest detected rectangle
-    largest_contour = None
-    angle = 0
+    # Morphological operations to remove noise
+    kernel = np.ones((5, 5), np.uint8)
+    mask_red = cv2.morphologyEx(mask_red, cv2.MORPH_OPEN, kernel)
+    mask_blue = cv2.morphologyEx(mask_blue, cv2.MORPH_OPEN, kernel)
+    mask_yellow = cv2.morphologyEx(mask_yellow, cv2.MORPH_OPEN, kernel)
 
-    # If contours are found, process the largest one
-    if contours:
-        # Find the largest contour based on area
-        largest_contour = max(contours, key=cv2.contourArea)
+    # Minimum contour area threshold
+    min_contour_area = 400  # Adjust this value based on the expected size of the rectangles
 
-        # Get the bounding box around the contour
-        x, y, w, h = cv2.boundingRect(largest_contour)
+    # List to store results for each color
+    color_info = {
+        'Red': (mask_red, (0, 0, 255)),
+        'Blue': (mask_blue, (255, 0, 0)),
+        'Yellow': (mask_yellow, (0, 255, 255))
+    }
 
-        # Calculate the angle of the rectangle using the width and height
-        dx = w  # width difference
-        dy = h  # height difference
+    llpython = []
 
-        # Calculate the angle using atan2, and convert it to degrees
-        angle = np.degrees(np.arctan2(dy, dx))
+    # Process each color
+    for color_name, (mask, color) in color_info.items():
+        # Find contours in the binary mask
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        # Draw the bounding box on the image
-        cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        # Process each contour that meets the fill rate requirement
+        for contour in contours:
+            # Ignore contours smaller than the minimum area
+            if cv2.contourArea(contour) < min_contour_area:
+                continue
 
-        # Display the angle on the image
-        cv2.putText(image, f"Angle: {angle:.2f} degrees", (10, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
+            # Calculate the bounding box around the contour
+            rect = cv2.minAreaRect(contour)
+            box = cv2.boxPoints(rect)
+            box = np.int0(box)
 
-    # Prepare output data for the robot
-    llpython = [angle]  # Output the angle to the robot
+            # Calculate contour area and bounding rectangle area
+            contour_area = cv2.contourArea(contour)
+            bounding_rect_area = rect[1][0] * rect[1][1]  # width * height of the bounding box
 
-    # Return the contour, the modified image, and the output data
-    return largest_contour, image, llpython
+            # Check if the contour meets the 80% fill rate threshold
+            if bounding_rect_area > 0 and (contour_area / bounding_rect_area) >= 0.8:
+                # Calculate lengths of rectangle sides
+                side_lengths = [
+                    np.linalg.norm(box[0] - box[1]),
+                    np.linalg.norm(box[1] - box[2]),
+                    np.linalg.norm(box[2] - box[3]),
+                    np.linalg.norm(box[3] - box[0])
+                ]
+
+                # Choose the longest side for angle calculation
+                if side_lengths[0] >= side_lengths[1]:
+                    pt1, pt2 = box[0], box[1]
+                else:
+                    pt1, pt2 = box[1], box[2]
+
+                # Calculate the angle of the longer side
+                dx = pt2[0] - pt1[0]
+                dy = pt2[1] - pt1[1]
+                angle = np.degrees(np.arctan2(dy, dx))
+
+                # Draw bounding box and label on the image
+                cv2.drawContours(image, [box], 0, color, 2)
+                cv2.putText(image, f"{color_name} Angle: {angle:.2f} degrees", (10, 30 * (list(color_info.keys()).index(color_name) + 1)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
+
+                # Append the angle to the output data
+                llpython.append(angle)
+
+    # Return the modified image and the output data
+    return contours, image, llpython
