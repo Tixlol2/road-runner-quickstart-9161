@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Tests;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -12,19 +12,20 @@ import org.firstinspires.ftc.teamcode.Intake.ClawSubsystemRoadRunner;
 
 
 @TeleOp(name="servoTest", group = "Drive")
-
+@Disabled
 public class servoTest extends LinearOpMode {
 
     //Class def
 
 
     Servo servo;
+    double servoTarget;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        servo = hardwareMap.get(Servo.class, "clawAngle");
+        servo = hardwareMap.get(Servo.class, "Test");
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         ClawSubsystemRoadRunner clawSubsystem = new ClawSubsystemRoadRunner(hardwareMap);
 
@@ -37,15 +38,21 @@ public class servoTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad2.b) {
-
-                Actions.runBlocking(clawSubsystem.setAngle(0));
+                servoTarget = 0;
             } else if (gamepad2.a) {
-                Actions.runBlocking(clawSubsystem.setAngle(1));
-
+                servoTarget = 1;
             }
             else if (gamepad2.x){
-                Actions.runBlocking(clawSubsystem.setAngle(.5));
+                servoTarget = 0.5;
             }
+
+
+            if(servo.getPosition() != servoTarget){servo.setPosition(servoTarget);}
+
+            telemetry.addData("Servo Target", servoTarget);
+            telemetry.addData("Servo Position", servo.getPosition());
+            telemetry.update();
+
 
 
         }
