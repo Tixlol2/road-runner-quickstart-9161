@@ -7,15 +7,15 @@ def runPipeline(image, llrobot):
     hsv_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
     # Define HSV ranges for red, blue, and yellow colors
-    lower_red1 = np.array([0, 70, 70])
+    lower_red1 = np.array([0, 70, 50])
     upper_red1 = np.array([10, 255, 255])
-    lower_red2 = np.array([170, 70, 70])
+    lower_red2 = np.array([170, 70, 50])
     upper_red2 = np.array([180, 255, 255])
 
-    lower_blue = np.array([100, 100, 60])
-    upper_blue = np.array([160, 255, 255])
+    lower_blue = np.array([80, 60, 8])
+    upper_blue = np.array([160, 255, 220])
 
-    lower_yellow = np.array([10, 0, 100])
+    lower_yellow = np.array([11, 0, 100])
     upper_yellow = np.array([30, 255, 255])
 
     # Create binary masks for red, blue, and yellow colors
@@ -30,19 +30,19 @@ def runPipeline(image, llrobot):
     mask_yellow = cv2.morphologyEx(mask_yellow, cv2.MORPH_OPEN, kernel)
 
     # Minimum contour area threshold
-    min_contour_area = 400  # Adjust this value based on the expected size of the rectangles
+    min_contour_area = 400
 
     # List to store results for each color
     color_info = {
-        'Red': (mask_red, (0, 0, 255)),
-        'Blue': (mask_blue, (255, 0, 0)),
-        'Yellow': (mask_yellow, (0, 255, 255))
+        'Red': (mask_red, (0, 0, 255), 0),  # Color index for identification
+        'Blue': (mask_blue, (255, 0, 0), 1),
+        'Yellow': (mask_yellow, (0, 255, 255), 2)
     }
 
     llpython = []
 
     # Process each color
-    for color_name, (mask, color) in color_info.items():
+    for color_name, (mask, color, color_index) in color_info.items():
         # Find contours in the binary mask
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -82,13 +82,14 @@ def runPipeline(image, llrobot):
                 dy = pt2[1] - pt1[1]
                 angle = np.degrees(np.arctan2(dy, dx))
 
+                # Append angle and color index as separate entries in the output array
+                llpython.append(angle)
+                llpython.append(color_index)
+
                 # Draw bounding box and label on the image
                 cv2.drawContours(image, [box], 0, color, 2)
-                cv2.putText(image, f"{color_name} Angle: {angle:.2f} degrees", (10, 30 * (list(color_info.keys()).index(color_name) + 1)),
+                cv2.putText(image, f"{color_name} Angle: {angle:.2f}", (10, 30 * (list(color_info.keys()).index(color_name) + 1)),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
-
-                # Append the angle to the output data
-                llpython.append(angle)
 
     # Return the modified image and the output data
     return contours, image, llpython
