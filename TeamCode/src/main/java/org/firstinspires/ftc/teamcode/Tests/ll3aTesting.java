@@ -40,7 +40,7 @@ public class ll3aTesting extends LinearOpMode {
             //Main loop
             LLResult result = ll3a.getLatestResult();
             // Getting numbers from Python
-
+            //TODO: Make this work with multiple blocks in the FOV, shouldn't be too hard in theory?
             //if(result.isValid()){
             double[] pythonOutputs = result.getPythonOutput();
             if (pythonOutputs != null && pythonOutputs.length > 0) {
