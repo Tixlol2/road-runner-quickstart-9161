@@ -70,7 +70,7 @@ public class Drive extends LinearOpMode {
         //hMap, name of servo used for claw
         clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver", "clawWrist");
         //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
-        armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
+        armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExtendUp", "armExtendDown", "armAngleLeft", "armAngleRight");
 //        armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem, 0,0 );
 
 

@@ -44,7 +44,7 @@ public class armSubclassTesting extends LinearOpMode {
         waitForStart();
 
 
-        armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
+        armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExtendUp", "armExtendDown", "armAngleLeft", "armAngleRight");
         //armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem, 0, 0);
 
         //armSubsystem.setDefaultCommand(armPIDFCommand);
