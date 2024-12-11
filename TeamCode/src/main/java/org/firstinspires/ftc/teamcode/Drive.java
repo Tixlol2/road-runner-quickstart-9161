@@ -117,12 +117,23 @@ public class Drive extends LinearOpMode {
             //Testing armSubsystem
             clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.025 * gp2Deflator);
             clawWrist = gamepad2.dpad_right ? 1 : gamepad2.dpad_up ? 0.5 : clawWrist;
+
+
+            //Extend to basket
             if (gamepad2.dpad_left) {
                 armSubsystem.setPos(46,90);
                 clawSubsystem.setAnglePosition(0.5);
                 clawSubsystem.setWristPosition(0.5);
                 angleTarget = armSubsystem.getAngleTarget();
                 extendTarget = armSubsystem.getExtTarget();
+                wait(500);
+                clawSubsystem.open();
+                wait(100);
+                clawSubsystem.close();
+                armSubsystem.setPos(0, 0);
+                clawSubsystem.setAnglePosition(0);
+                clawSubsystem.setWristPosition(0);
+            //
             } else if (gamepad2.dpad_down) {
                 armSubsystem.setPos(22,0);
                 clawTarget = 0;
@@ -130,6 +141,7 @@ public class Drive extends LinearOpMode {
                 clawSubsystem.open();
                 angleTarget = armSubsystem.getAngleTarget();
                 extendTarget = armSubsystem.getExtTarget();
+            //Prepare to score specimen
             } else if (gamepad2.left_stick_button) {
                 armSubsystem.setPos(0,45);
                 angleTarget = armSubsystem.getAngleTarget();
