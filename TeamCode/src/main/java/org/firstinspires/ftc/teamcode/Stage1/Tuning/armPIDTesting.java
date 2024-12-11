@@ -21,11 +21,17 @@ public class armPIDTesting extends LinearOpMode {
 
     public static int angleTarget = 0;
 
-    private final double ticks_in_degree = (751.8 * 3) / 360;
+    //Angle Motor
+    static double ticks_per_rotation = 751.8;
+    //TODO: UPDATE THIS VIA EMPIRICAL DATA 96 deg
+    static double gear_reduction = 1/(800/((ticks_per_rotation * 360) / 96));
+
+    private final double ticks_in_degree = (ticks_per_rotation * gear_reduction) / 360;
 
     private final double ticks_in_inch = ticks_in_degree / 4.409;
 
-    private DcMotorEx angleMotor;
+    private DcMotorEx angleMotorLeft;
+    private DcMotorEx angleMotorRight;
 
 
     @Override
@@ -33,16 +39,17 @@ public class armPIDTesting extends LinearOpMode {
 
         angleController = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        angleMotor = hardwareMap.get(DcMotorEx.class, "armAng");
-        angleMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        angleMotorRight = hardwareMap.get(DcMotorEx.class, "armAngleRight");
+        angleMotorLeft = hardwareMap.get(DcMotorEx.class, "armAngleLeft");
 
+        angleMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         waitForStart();
 
         while(!isStopRequested()){
 
-            double armAngle = angleMotor.getCurrentPosition();
+            double armAngle = angleMotorLeft.getCurrentPosition();
             angleController.setPID(p,i,d);
 
 
@@ -56,7 +63,8 @@ public class armPIDTesting extends LinearOpMode {
             double anglefeedForward = Math.cos(Math.toRadians(-armAngle / ticks_in_degree)) * fAngle;
             double anglePower = Math.max(-0.8, Math.min(0.8, anglePIDFpower + anglefeedForward));
 
-            angleMotor.setPower(anglePower);
+            angleMotorLeft.setPower(anglePower);
+            angleMotorRight.setPower(anglePower);
 
 
             telemetry.addData("Current Pos: ", armAngle);

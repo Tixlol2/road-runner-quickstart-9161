@@ -22,9 +22,19 @@ public class armSubsystem extends SubsystemBase {
     private static final double pAngle = 0.0035, iAngle = 0.05, dAngle = 0;
     private static double fAngle = 0.3;
 
-    private static final double ticks_in_degree = (751.8 * 3) / 360;
 
-    private static final double ticks_in_inch = 537.7 / (112 / 25.4);
+    //Angle Motor
+    static double ticks_per_rotation = 751.8;
+    //TODO: UPDATE THIS VIA EMPIRICAL DATA 96 deg
+    static double gear_reduction = 800/((ticks_per_rotation * 360) / 96);
+
+    private static final double ticks_in_degree = (ticks_per_rotation * gear_reduction) / 360;
+
+
+    //Extension Motor
+    static double ticks_per_rotation_ext = 537.7;
+
+    private static final double ticks_in_inch = ticks_per_rotation_ext / (112 / 25.4);
 
 
     private static double pExtend = 0.008, iExtend = 0.05, dExtend = 0, fExtend = 0;
@@ -35,8 +45,8 @@ public class armSubsystem extends SubsystemBase {
     private int extPos;
     private int extTarget;
 
-    private static final int angleMax = 0;
-    private static final int angleMin = -550;
+    private static final int angleMax = 800;
+    private static final int angleMin = 30;
     private static final int extMin = 0;
     private static final int extMax = 3400;
 

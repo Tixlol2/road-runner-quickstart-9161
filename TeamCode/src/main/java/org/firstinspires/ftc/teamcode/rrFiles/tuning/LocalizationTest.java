@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.rrFiles.Drawing;
 import org.firstinspires.ftc.teamcode.rrFiles.MecanumDrive;
 import org.firstinspires.ftc.teamcode.rrFiles.TankDrive;
-@Disabled
+
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

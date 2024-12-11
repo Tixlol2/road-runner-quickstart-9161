@@ -32,6 +32,10 @@ public class extendTest extends LinearOpMode {
             upMotor.setPower(-power);
             downMotor.setPower(-power);
 
+            telemetry.addData("Up Motor Ticks", upMotor.getCurrentPosition());
+            telemetry.addData("Down Motor Ticks", downMotor.getCurrentPosition());
+            telemetry.update();
+
         }
 
 

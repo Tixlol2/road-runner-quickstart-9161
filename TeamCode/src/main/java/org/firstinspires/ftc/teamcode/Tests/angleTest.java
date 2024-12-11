@@ -14,23 +14,31 @@ public class angleTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+
+
         leftMotor = hardwareMap.get(DcMotorEx.class, "armAngleLeft");
         rightMotor = hardwareMap.get(DcMotorEx.class, "armAngleRight");
 
 
-        while (opModeInInit()){
 
 
-
-
-        }
+//        while (opModeInInit()){
+//
+//
+//
+//
+//        }
+        waitForStart();
 
         while(opModeIsActive()){
 
-            power = gamepad1.left_stick_y;
+            //power = gamepad1.left_stick_y;
 
-            leftMotor.setPower(power);
-            rightMotor.setPower(-power);
+            //leftMotor.setPower(power);
+            //rightMotor.setPower(-power);
+
+            telemetry.addData("Left Motor Ticks", leftMotor.getCurrentPosition());
+            telemetry.update();
 
         }
 

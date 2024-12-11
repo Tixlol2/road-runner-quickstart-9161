@@ -48,7 +48,10 @@ public class ll3aTesting extends LinearOpMode {
                 else {
                     color = determineColor(pythonOutputs);
                     telemetry.addData("Color", color);
-                    telemetry.addData("Angle in Degrees", pythonOutputs[0]);}
+                    telemetry.addData("Angle in Degrees", pythonOutputs[0]);
+                    telemetry.addData("X", pythonOutputs[2]);
+                    telemetry.addData("Y", pythonOutputs[3]);
+                }
             } else {
                 telemetry.addLine("No data received from Limelight.");
                 }
@@ -59,6 +62,7 @@ public class ll3aTesting extends LinearOpMode {
                 telemetry.addData("Data", "Old (" + staleness + " ms)");
             }
             //} else {telemetry.addLine("Result is not valid");}
+
 
 
 
