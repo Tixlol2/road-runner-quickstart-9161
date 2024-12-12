@@ -44,7 +44,7 @@ public class Drive extends LinearOpMode {
 
 
 
-    public  double pAngle = .0028, iAngle = 0, dAngle = 0.000, fAngle = -0.01;
+    public  double pAngle = .005, iAngle = 0, dAngle = 0.000, fAngle = .1;
     public static double pExtend = 0.008, iExtend = 0, dExtend = 0;
 
 

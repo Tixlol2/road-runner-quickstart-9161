@@ -19,8 +19,8 @@ public class armSubsystem extends SubsystemBase {
 
 
 
-    private static final double pAngle = 0.0035, iAngle = 0.05, dAngle = 0;
-    private static double fAngle = 0.3;
+    private static final double pAngle = .005, iAngle = .1, dAngle = 0.001;
+    private static double fAngle = 0.1;
 
 
     //Angle Motor

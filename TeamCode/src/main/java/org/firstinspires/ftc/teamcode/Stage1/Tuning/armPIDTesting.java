@@ -16,8 +16,8 @@ public class armPIDTesting extends LinearOpMode {
 
     private PIDController angleController;
 
-    public static double p = 0.0035, i = 0.05, d = 0.0003;
-    public static double fAngle = .25;
+    public static double p = .005, i = 0.1, d = 0.0001;
+    public static double fAngle = .1;
 
     public static int angleTarget = 0;
 
@@ -56,7 +56,7 @@ public class armPIDTesting extends LinearOpMode {
 
             // CLamping
 
-            angleTarget = Math.max(10, Math.min(550, angleTarget));
+            angleTarget = Math.max(10, Math.min(800, angleTarget));
 
             //Angle motor
             double anglePIDFpower = angleController.calculate(armAngle, angleTarget);
