@@ -47,7 +47,7 @@ public class redScore extends LinearOpMode {
                 .splineToConstantHeading(autoPoints.redRungMidpoint.component1(), autoPoints.startRedScore.component2())
                 //Extend to score, open claw
                 .stopAndAdd(new SequentialAction(
-                        armSubsystem.setPosrr(new Vector2d(18.5, 23)),
+                        armSubsystem.setPosrr(new Vector2d(18.5, 25)),
                         clawSubsystem.setAngle(0),
                         armSubsystem.setPosrr(new Vector2d(20, 16))
                 ))
@@ -60,7 +60,7 @@ public class redScore extends LinearOpMode {
                 .stopAndAdd(new SequentialAction(
                         //Sets arm to hover over the right block
                         clawSubsystem.setAngle(0),
-                        armSubsystem.setPosrr(new Vector2d(32.5, 3.2))
+                        armSubsystem.setPosrr(new Vector2d(32.5, 5.2))
 
 
                 ))
@@ -94,7 +94,7 @@ public class redScore extends LinearOpMode {
                 .stopAndAdd(new SequentialAction(
                         new ParallelAction(
                                 //Sets arm to hover over the middle block
-                                armSubsystem.setPosrr(new Vector2d(34.5, 4.1)),
+                                armSubsystem.setPosrr(new Vector2d(34.5, 6.1)),
                                 clawSubsystem.setAngle(0)
                         )))
                 .waitSeconds(0.5)
@@ -126,7 +126,7 @@ public class redScore extends LinearOpMode {
                 .stopAndAdd(new SequentialAction(
                         new ParallelAction(
                                 //Sets arm to hover over the right block
-                                armSubsystem.setPosrr(new Vector2d(32.5, 3.8)),
+                                armSubsystem.setPosrr(new Vector2d(32.5, 5.8)),
                                 clawSubsystem.setAngle(0)
 
                         )))
@@ -166,8 +166,9 @@ public class redScore extends LinearOpMode {
             //Init Loop
             Actions.runBlocking(new ParallelAction(
                     clawSubsystem.setAngle(1),
-                    clawSubsystem.setWrist(.5),
-                    clawSubsystem.closeClaw()
+                    clawSubsystem.setWrist(1),
+                    clawSubsystem.closeClaw(),
+                    armSubsystem.setPosrr(new Vector2d(16, 13))
             ));
 
         }

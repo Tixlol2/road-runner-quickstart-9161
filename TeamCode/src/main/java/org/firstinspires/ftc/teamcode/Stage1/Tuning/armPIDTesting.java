@@ -16,10 +16,10 @@ public class armPIDTesting extends LinearOpMode {
 
     private PIDController angleController;
 
-    public static double p = .005, i = 0.1, d = 0.0001;
+    public static double p = .005, i = 0.05, d = 0.0002;
     public static double fAngle = .1;
 
-    public static int angleTarget = 0;
+    public static int angleTarget = 10;
 
     //Angle Motor
     static double ticks_per_rotation = 751.8;

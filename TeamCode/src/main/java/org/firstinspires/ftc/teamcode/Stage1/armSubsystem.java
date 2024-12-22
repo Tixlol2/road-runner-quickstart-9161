@@ -19,14 +19,14 @@ public class armSubsystem extends SubsystemBase {
 
 
 
-    private static final double pAngle = .005, iAngle = .1, dAngle = 0.001;
+    private static final double pAngle = 0.005, iAngle = 0.0, dAngle = 0;
     private static double fAngle = 0.1;
 
 
     //Angle Motor
     static double ticks_per_rotation = 751.8;
     //TODO: UPDATE THIS VIA EMPIRICAL DATA 96 deg
-    static double gear_reduction = 800/((ticks_per_rotation * 360) / 96);
+    static double gear_reduction = 1/(800/((ticks_per_rotation * 360) / 96));
 
     private static final double ticks_in_degree = (ticks_per_rotation * gear_reduction) / 360;
 
@@ -46,9 +46,9 @@ public class armSubsystem extends SubsystemBase {
     private int extTarget;
 
     private static final int angleMax = 800;
-    private static final int angleMin = 30;
-    private static final int extMin = 0;
-    private static final int extMax = 3400;
+    private static final int angleMin = 10;
+    private static final int extMin = 10;
+    private static final int extMax = 3600;
 
     private static final PIDController angleController = new PIDController(pAngle, iAngle, dAngle);
     private static final PIDController extendController = new PIDController(pExtend, iExtend, dExtend);
@@ -140,6 +140,7 @@ public class armSubsystem extends SubsystemBase {
     // Calculations
     // ----------------
 
+
     public void update(int setAngleTarget, int setExtendTarget) {
         angleTarget = setAngleTarget;
         extTarget = setExtendTarget;
@@ -159,7 +160,7 @@ public class armSubsystem extends SubsystemBase {
         // CLamping
 
         angleTarget = Math.max(angleMin, Math.min(angleMax, angleTarget));
-        extTarget = (int) Math.max(extMin, Math.min(Math.min(extMax, extMax - ((extMax - 20*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree)))), extTarget));
+        extTarget = (int) Math.max(extMin, Math.min(Math.min(extMax, extMax - ((extMax - 16*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree)))), extTarget));
 
         //Angle motor
         //angleController.setPID(pAngle,iAngle,dAngle);
@@ -194,7 +195,7 @@ public class armSubsystem extends SubsystemBase {
         // CLamping
 
         angleTarget = Math.max(angleMin, Math.min(angleMax, angleTarget));
-        extTarget = (int) Math.max(extMin, Math.min(Math.min(extMax, extMax - ((extMax - 22*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree)))), extTarget));
+        extTarget = (int) Math.max(extMin, Math.min(Math.min(extMax, extMax - ((extMax - 26*ticks_in_inch) * Math.cos(Math.toRadians(armAngle / ticks_in_degree)))), extTarget));
 
         //Angle motor
         //angleController.setPID(pAngle,iAngle,dAngle);

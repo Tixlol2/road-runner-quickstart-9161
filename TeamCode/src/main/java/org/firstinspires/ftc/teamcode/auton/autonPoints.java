@@ -53,7 +53,7 @@ public class autonPoints {
     public Pose2d redSubmersibleMidpoint = new Pose2d(-24, -2, 0);
     public Pose2d blueSubmersibleMidpoint = new Pose2d(28, 8, Math.toRadians(180));
 
-    public Pose2d redRungMidpoint = new Pose2d(-6, -36, 0);
+    public Pose2d redRungMidpoint = new Pose2d(-7, -36, 0);
     public Pose2d blueRungMidpoint = new Pose2d(0, 36, 0);
 
     public Pose2d redScore = new Pose2d(-55, -54, Math.toRadians(-315));

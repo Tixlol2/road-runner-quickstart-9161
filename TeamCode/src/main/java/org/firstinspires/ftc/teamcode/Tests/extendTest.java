@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 @TeleOp
 public class extendTest extends LinearOpMode {
 
@@ -16,6 +18,8 @@ public class extendTest extends LinearOpMode {
 
         upMotor = hardwareMap.get(DcMotorEx.class, "armExtendUp");
         downMotor = hardwareMap.get(DcMotorEx.class, "armExtendDown");
+        upMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        downMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         while (opModeInInit()){

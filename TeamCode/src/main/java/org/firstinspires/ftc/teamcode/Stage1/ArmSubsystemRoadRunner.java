@@ -14,7 +14,7 @@ public class ArmSubsystemRoadRunner extends armSubsystem {
 
 
     public ArmSubsystemRoadRunner(HardwareMap hardwareMap){
-        super(hardwareMap, "armExtendLeft", "armExtendRight", "armAngleUp", "armAngleDown", 0.005, 0.12, 0.0008, 0.3, 0.008, 0.05, 0);
+        super(hardwareMap, "armExtendUp", "armExtendDown", "armAngleLeft", "armAngleRight", 0.005, 0, 0, 0.1, 0.008, 0.05, 0);
 
 
     }

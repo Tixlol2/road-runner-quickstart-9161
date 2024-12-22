@@ -111,8 +111,8 @@ public class Drive extends LinearOpMode {
             } else if (gamepad2.y) {
                 clawTarget = 0;
             }
-            if (gamepad2.dpad_down){clawSubsystem.setWristPosition(1);}
-            else if (gamepad2.dpad_up){clawSubsystem.setWristPosition(1);}
+            if (gamepad2.dpad_right ){clawSubsystem.setWristPosition(1);}
+            else if (gamepad2.dpad_up){clawSubsystem.setWristPosition(0);}
 
             //Testing armSubsystem
             clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.025 * gp2Deflator);
@@ -126,13 +126,13 @@ public class Drive extends LinearOpMode {
                 clawSubsystem.setWristPosition(0.5);
                 angleTarget = armSubsystem.getAngleTarget();
                 extendTarget = armSubsystem.getExtTarget();
-                wait(500);
-                clawSubsystem.open();
-                wait(100);
-                clawSubsystem.close();
-                armSubsystem.setPos(0, 0);
-                clawSubsystem.setAnglePosition(0);
-                clawSubsystem.setWristPosition(0);
+//                wait(500);
+//                clawSubsystem.open();
+//                wait(100);
+//                clawSubsystem.close();
+//                armSubsystem.setPos(0, 0);
+//                clawSubsystem.setAnglePosition(0);
+//                clawSubsystem.setWristPosition(0);
             //
             } else if (gamepad2.dpad_down) {
                 armSubsystem.setPos(22,0);
@@ -148,8 +148,8 @@ public class Drive extends LinearOpMode {
                 extendTarget = armSubsystem.getExtTarget();
             }
 
-            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * -12 * gp2Deflator);
-            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * -80 * gp2Deflator);
+            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * -16 * gp2Deflator);
+            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * -120 * gp2Deflator);
 
 
             // ----------------------------
@@ -202,7 +202,8 @@ public class Drive extends LinearOpMode {
                     -gamepad1.right_stick_x* gp1Deflator
             ));
 
-
+            angleTarget = armSubsystem.getAngleTarget();
+            extendTarget = armSubsystem.getExtTarget();
 
             telemetry.addLine("Lock In 🔥 🔥 🔥");
             telemetry.addLine("Improvement Is The First Step to Success");
