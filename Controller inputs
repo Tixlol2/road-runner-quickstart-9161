@@ -1,1 +1,33 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
+public class GamepadInputSearcher {
+
+  public static void main(String[] args) {
+    String Drive.java = "path/to/Drive.java/code"
+    searchForGamepadInputs(Drive.java);
+}
+
+public static void searchForGamepadInputs(String Drive.java){
+  try (BufferedReader br = new BufferedReader(new FileReader(Drive.java))){
+    String line;
+    int lineNum = 0;
+    boolean found = false;
+
+    while ((line = br.readLine()) ≠ null){
+      lineNum++;
+      if(line.contains("gamepad1") || line.contains("gamepad2")){
+        System.out.println("Found at line " + lineNum + ": " + line.trim());
+        found = true;
+      }
+    }
+
+    if (!found){
+      System.out.println("No gamepad inputs found in the file.");
+    }
+  } catch (IOException e) {
+    System.err.println("Error reading the file: " + e.getMessage());
+  }
+}
+}
